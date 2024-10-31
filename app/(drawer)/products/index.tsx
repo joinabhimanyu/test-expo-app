@@ -4,10 +4,7 @@ import React, { useEffect, useMemo } from "react";
 import { Text, View, StyleSheet, ActivityIndicator, FlatList, Image, TouchableHighlight } from "react-native";
 import baseStyles from "../../../styles/baseStyles";
 import {Stack, useRouter} from "expo-router";
-import {Colors} from "@/constants/Colors";
-import {Ionicons} from "@expo/vector-icons";
 import {useColorScheme} from "@/hooks/useColorScheme";
-import Drawer from "expo-router/drawer";
 
 export default function Index() {
 
@@ -30,24 +27,24 @@ export default function Index() {
 
       return (
         <>
-            <Stack.Screen
-                options={{
-                    headerTitle: () => (
-                        <Text style={{fontSize: 18}}>Products</Text>
-                    ),
-                    headerTitleAlign: 'left',
-                    headerTintColor: "black",
-                    headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
-                    headerShown: true,
-                    headerRight: () => (
-                        <TouchableHighlight
-                            underlayColor="transparent"
-                            onPress={()=>false}
-                            style={{cursor: 'pointer', marginRight: 20}}>
-                            <Ionicons name="cart" size={24}/>
-                        </TouchableHighlight>
-                    )
-                }}/>
+            {/*<Stack.Screen*/}
+            {/*    options={{*/}
+            {/*        headerTitle: () => (*/}
+            {/*            <Text style={{fontSize: 18}}>Products</Text>*/}
+            {/*        ),*/}
+            {/*        headerTitleAlign: 'left',*/}
+            {/*        headerTintColor: "black",*/}
+            {/*        headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},*/}
+            {/*        headerShown: true,*/}
+            {/*        headerRight: () => (*/}
+            {/*            <TouchableHighlight*/}
+            {/*                underlayColor="transparent"*/}
+            {/*                onPress={()=>false}*/}
+            {/*                style={{cursor: 'pointer', marginRight: 15}}>*/}
+            {/*                <Ionicons name="cart" size={24}/>*/}
+            {/*            </TouchableHighlight>*/}
+            {/*        )*/}
+            {/*    }}/>*/}
           <View style={styles.gridContainer}>
             <FlatList
               data={data.products}

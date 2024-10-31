@@ -1,35 +1,26 @@
 import {Routes} from '@/constants/Routes';
 import {Ionicons} from '@expo/vector-icons';
-import {Slot, Stack, useGlobalSearchParams, useNavigation, usePathname, useRouter} from 'expo-router';
+import {Stack, useGlobalSearchParams, useNavigation, usePathname, useRouter} from 'expo-router';
 import React, {useEffect, useState} from 'react';
-import {TouchableHighlight, SafeAreaView, Text, StyleSheet, Alert, View} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {TouchableHighlight, Text, StyleSheet, Alert} from 'react-native';
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {Colors} from "@/constants/Colors";
 
 export default function ProductsLayout() {
 
     const [title, setTitle] = useState('');
-    const [backButtonEnabled, setBackButtonEnabled] = useState(false);
     const pathname = usePathname();
     const params = useGlobalSearchParams();
-    const router = useRouter();
-    const navigation = useNavigation()
     const colorScheme = useColorScheme()
 
 
     useEffect(() => {
         console.log('route change event fired')
-        if (pathname) {
-            for (const key of Object.keys(Routes?.routeMap)) {
-                console.clear()
-                if (Routes?.routeMap[key] && Routes?.routeMap[key].pattern && Routes?.routeMap[key].pattern.test(pathname)) {
-                    console.log('pathname: ', pathname)
-                    console.log('title: ', Routes?.routeMap[key].title)
-                    setTitle(Routes?.routeMap[key].title);
-                    setBackButtonEnabled((Routes?.routeMap[key].isNested || false))
-                    break;
-                }
+        console.log('pathname: ', pathname)
+        for (const key of Object.keys(Routes?.routeMap)) {
+            if (Routes?.routeMap[key] && Routes?.routeMap[key].pattern && Routes?.routeMap[key].pattern.test(pathname??"")) {
+                setTitle(Routes?.routeMap[key].title);
+                break;
             }
         }
     }, [pathname, params]);
@@ -42,24 +33,6 @@ export default function ProductsLayout() {
 
     return (
         <>
-            {/*<Stack.Screen*/}
-            {/*    options={{*/}
-            {/*        headerTitle: () => (*/}
-            {/*            <Text style={{fontSize: 18}}>{title}</Text>*/}
-            {/*        ),*/}
-            {/*        headerTitleAlign: 'left',*/}
-            {/*        headerTintColor: "black",*/}
-            {/*        headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},*/}
-            {/*        headerShown: true,*/}
-            {/*        headerRight: () => (*/}
-            {/*            <TouchableHighlight*/}
-            {/*                underlayColor="transparent"*/}
-            {/*                onPress={onPressButton}*/}
-            {/*                style={{cursor: 'pointer', marginRight: 20}}>*/}
-            {/*                <Ionicons name="cart" size={24}/>*/}
-            {/*            </TouchableHighlight>*/}
-            {/*        )*/}
-            {/*    }}/>*/}
             {/*<SafeAreaProvider>*/}
             {/*    <SafeAreaView*/}
             {/*        style={styles.container}>*/}
@@ -67,7 +40,21 @@ export default function ProductsLayout() {
             {/*    </SafeAreaView>*/}
             {/*</SafeAreaProvider>*/}
             <Stack screenOptions={{
-                headerShown: true
+                headerTitle: () => (
+                    <Text style={{fontSize: 18}}>{title}</Text>
+                ),
+                headerTitleAlign: 'left',
+                headerTintColor: "black",
+                headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
+                headerShown: true,
+                headerRight: () => (
+                    <TouchableHighlight
+                        underlayColor="transparent"
+                        onPress={() => false}
+                        style={{cursor: 'pointer', marginRight: 15}}>
+                        <Ionicons name="cart" size={24}/>
+                    </TouchableHighlight>
+                )
             }}>
                 <Stack.Screen name="index"/>
                 <Stack.Screen name="[id]"/>

@@ -1,18 +1,16 @@
 import {useFetchGeneric} from "@/hooks/api/useFetch";
-import {Product, ProductResponse} from "@/models/product";
-import React, {useEffect, useMemo} from "react";
+import {Product} from "@/models/product";
+import React, {useEffect} from "react";
 import {
     ActivityIndicator,
     View,
     Text,
     Image,
     ScrollView,
-    FlatList,
-    TouchableOpacity,
-    TouchableHighlight
+    TouchableOpacity
 } from "react-native";
 import baseStyles from "../../../styles/baseStyles";
-import {Stack, useLocalSearchParams} from "expo-router";
+import {useLocalSearchParams} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
 import {Colors} from "@/constants/Colors";
 import {useColorScheme} from "@/hooks/useColorScheme";
@@ -34,24 +32,24 @@ export default function ProductDetails() {
 
     return (
         <>
-            <Stack.Screen
-                options={{
-                    headerTitle: () => (
-                        <Text style={{fontSize: 18}}>Products Details</Text>
-                    ),
-                    headerTitleAlign: 'left',
-                    headerTintColor: "black",
-                    headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
-                    headerShown: true,
-                    headerRight: () => (
-                        <TouchableHighlight
-                            underlayColor="transparent"
-                            onPress={()=>false}
-                            style={{cursor: 'pointer', marginRight: 20}}>
-                            <Ionicons name="cart" size={24}/>
-                        </TouchableHighlight>
-                    )
-                }}/>
+            {/*<Stack.Screen*/}
+            {/*    options={{*/}
+            {/*        headerTitle: () => (*/}
+            {/*            <Text style={{fontSize: 18}}>Products Details</Text>*/}
+            {/*        ),*/}
+            {/*        headerTitleAlign: 'left',*/}
+            {/*        headerTintColor: "black",*/}
+            {/*        headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},*/}
+            {/*        headerShown: true,*/}
+            {/*        headerRight: () => (*/}
+            {/*            <TouchableHighlight*/}
+            {/*                underlayColor="transparent"*/}
+            {/*                onPress={()=>false}*/}
+            {/*                style={{cursor: 'pointer', marginRight: 15}}>*/}
+            {/*                <Ionicons name="cart" size={24}/>*/}
+            {/*            </TouchableHighlight>*/}
+            {/*        )*/}
+            {/*    }}/>*/}
             {loading ? (
                 <ActivityIndicator style={baseStyles.loading} size='large'/>
             ) : (

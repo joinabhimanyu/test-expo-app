@@ -5,9 +5,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
 import {useColorScheme} from '@/hooks/useColorScheme';
-import {Routes} from '@/constants/Routes';
 import {Stack} from "expo-router";
-import HomeScreen from "@/app-example/(tabs)";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import {SafeAreaView} from "react-native";
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();
@@ -25,11 +25,13 @@ export default function RootLayout() {
         return null;
     }
     return (
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack>
-                <Stack.Screen name="(drawer)" options={{headerShown: false}}/>
-                <Stack.Screen name='+not-found'/>
-            </Stack>
-        </ThemeProvider>
+        <SafeAreaProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <Stack>
+                    <Stack.Screen name="(drawer)" options={{headerShown: false}}/>
+                    <Stack.Screen name='+not-found'/>
+                </Stack>
+            </ThemeProvider>
+        </SafeAreaProvider>
     );
 }

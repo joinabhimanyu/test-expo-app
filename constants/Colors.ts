@@ -14,6 +14,9 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    stackHeaderBackground: '#9bdff2',
+    drawerActiveBackgroundColor: "#C6F3CA",
+    drawerActiveTintColor: "#12B886"
   },
   dark: {
     text: '#ECEDEE',
@@ -22,5 +25,8 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+    stackHeaderBackground: '#9bdff2',
+    drawerActiveBackgroundColor: "#C6F3CA",
+    drawerActiveTintColor: "#12B886"
   },
 };

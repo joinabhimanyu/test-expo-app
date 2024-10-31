@@ -1,14 +1,26 @@
 import {useFetchGeneric} from "@/hooks/api/useFetch";
 import {Product, ProductResponse} from "@/models/product";
 import React, {useEffect, useMemo} from "react";
-import {ActivityIndicator, View, Text, Image, ScrollView, FlatList, TouchableOpacity} from "react-native";
+import {
+    ActivityIndicator,
+    View,
+    Text,
+    Image,
+    ScrollView,
+    FlatList,
+    TouchableOpacity,
+    TouchableHighlight
+} from "react-native";
 import baseStyles from "../../../styles/baseStyles";
-import {useLocalSearchParams} from "expo-router";
+import {Stack, useLocalSearchParams} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
+import {Colors} from "@/constants/Colors";
+import {useColorScheme} from "@/hooks/useColorScheme";
 
 export default function ProductDetails() {
 
     const {id} = useLocalSearchParams<{ id: string }>();
+    const colorScheme=useColorScheme()
     const {loading, error, data, fetchData} = useFetchGeneric<Product>(
         {
             url: `https://dummyjson.com/products/${id}`,
@@ -22,6 +34,24 @@ export default function ProductDetails() {
 
     return (
         <>
+            <Stack.Screen
+                options={{
+                    headerTitle: () => (
+                        <Text style={{fontSize: 18}}>Products Details</Text>
+                    ),
+                    headerTitleAlign: 'left',
+                    headerTintColor: "black",
+                    headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
+                    headerShown: true,
+                    headerRight: () => (
+                        <TouchableHighlight
+                            underlayColor="transparent"
+                            onPress={()=>false}
+                            style={{cursor: 'pointer', marginRight: 20}}>
+                            <Ionicons name="cart" size={24}/>
+                        </TouchableHighlight>
+                    )
+                }}/>
             {loading ? (
                 <ActivityIndicator style={baseStyles.loading} size='large'/>
             ) : (
@@ -165,7 +195,7 @@ export default function ProductDetails() {
                                                     <Text
                                                         style={{paddingLeft: 10, paddingRight: 20}}>{data.rating}</Text>
                                                     {[...Array(Math.ceil(data.rating)).keys()].map(i => (
-                                                        <Ionicons name="star" color="orange" size={15}/>
+                                                        <Ionicons key={i} name="star" color="orange" size={15}/>
                                                     ))}
                                                 </View>
 

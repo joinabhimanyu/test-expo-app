@@ -26,7 +26,7 @@ export default function RootLayout() {
     }
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack initialRouteName="products">
+            <Stack>
                 <Stack.Screen name="(drawer)" options={{headerShown: false}}/>
                 <Stack.Screen name='+not-found'/>
             </Stack>

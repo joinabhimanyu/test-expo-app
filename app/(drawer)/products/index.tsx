@@ -3,11 +3,16 @@ import { ProductResponse } from "@/models/product";
 import React, { useEffect, useMemo } from "react";
 import { Text, View, StyleSheet, ActivityIndicator, FlatList, Image, TouchableHighlight } from "react-native";
 import baseStyles from "../../../styles/baseStyles";
-import {useRouter } from "expo-router";
+import {Stack, useRouter} from "expo-router";
+import {Colors} from "@/constants/Colors";
+import {Ionicons} from "@expo/vector-icons";
+import {useColorScheme} from "@/hooks/useColorScheme";
+import Drawer from "expo-router/drawer";
 
 export default function Index() {
 
   const router=useRouter();
+  const colorScheme=useColorScheme()
   const { loading, error, data, fetchData } = useFetchGeneric<ProductResponse>(
     {
       url: 'https://dummyjson.com/products',
@@ -25,6 +30,24 @@ export default function Index() {
 
       return (
         <>
+            <Stack.Screen
+                options={{
+                    headerTitle: () => (
+                        <Text style={{fontSize: 18}}>Products</Text>
+                    ),
+                    headerTitleAlign: 'left',
+                    headerTintColor: "black",
+                    headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
+                    headerShown: true,
+                    headerRight: () => (
+                        <TouchableHighlight
+                            underlayColor="transparent"
+                            onPress={()=>false}
+                            style={{cursor: 'pointer', marginRight: 20}}>
+                            <Ionicons name="cart" size={24}/>
+                        </TouchableHighlight>
+                    )
+                }}/>
           <View style={styles.gridContainer}>
             <FlatList
               data={data.products}
@@ -32,7 +55,7 @@ export default function Index() {
                 <TouchableHighlight underlayColor="transparent" onPress={() => {
                  console.log('item clicked')
                  router.push({
-                  pathname: '/products/[id]',
+                  pathname: '/(drawer)/products/[id]',
                   params: { id: item.id },
                  })
                   // router.navigate({pathname: '/products', params: {productId: item.id}});

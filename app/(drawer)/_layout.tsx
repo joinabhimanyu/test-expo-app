@@ -1,28 +1,30 @@
 import React from 'react'
 import {Drawer} from "expo-router/drawer";
 import {FontAwesome} from "@expo/vector-icons";
+import {useColorScheme} from "@/hooks/useColorScheme";
+import {Colors} from "@/constants/Colors";
 
 export default function DrawerLayout() {
+    const colorScheme = useColorScheme();
+
     return (
-        <Drawer initialRouteName="products"
-                screenOptions={{drawerActiveBackgroundColor:"#C6F3CA", drawerActiveTintColor:"#12B886"}}>
+        <Drawer
+            initialRouteName="products"
+            screenOptions={{
+                drawerActiveBackgroundColor: Colors[colorScheme ?? 'light'].drawerActiveBackgroundColor,
+                drawerActiveTintColor: Colors[colorScheme ?? 'light'].drawerActiveTintColor
+            }}>
             <Drawer.Screen
                 name="products" // This is the name of the page and must match the url from root
                 options={{
+                    headerShown: true,
                     drawerLabel: "Products",
-                    title: "overview",
-                    drawerIcon: ({ color }) => (
-                        <FontAwesome name="home" size={20} color={color} />
+                    title: "Products",
+                    drawerIcon: ({color}) => (
+                        <FontAwesome name="home" size={20} color={color}/>
                     ),
                 }}
             />
-            {/*<Drawer.Screen*/}
-            {/*    name="products/[id]" // This is the name of the page and must match the url from root*/}
-            {/*    options={{*/}
-            {/*        drawerLabel: "Product Details",*/}
-            {/*        title: "overview",*/}
-            {/*    }}*/}
-            {/*/>*/}
         </Drawer>
     )
 }

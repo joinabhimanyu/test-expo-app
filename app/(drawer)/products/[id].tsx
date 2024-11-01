@@ -14,6 +14,7 @@ import {useLocalSearchParams} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
 import {Colors} from "@/constants/Colors";
 import {useColorScheme} from "@/hooks/useColorScheme";
+import Drawer from "expo-router/drawer";
 
 export default function ProductDetails() {
 
@@ -32,24 +33,7 @@ export default function ProductDetails() {
 
     return (
         <>
-            {/*<Stack.Screen*/}
-            {/*    options={{*/}
-            {/*        headerTitle: () => (*/}
-            {/*            <Text style={{fontSize: 18}}>Products Details</Text>*/}
-            {/*        ),*/}
-            {/*        headerTitleAlign: 'left',*/}
-            {/*        headerTintColor: "black",*/}
-            {/*        headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},*/}
-            {/*        headerShown: true,*/}
-            {/*        headerRight: () => (*/}
-            {/*            <TouchableHighlight*/}
-            {/*                underlayColor="transparent"*/}
-            {/*                onPress={()=>false}*/}
-            {/*                style={{cursor: 'pointer', marginRight: 15}}>*/}
-            {/*                <Ionicons name="cart" size={24}/>*/}
-            {/*            </TouchableHighlight>*/}
-            {/*        )*/}
-            {/*    }}/>*/}
+            {/*<Drawer.Screen options={{headerShown:false}}/>*/}
             {loading ? (
                 <ActivityIndicator style={baseStyles.loading} size='large'/>
             ) : (

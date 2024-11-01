@@ -33,12 +33,6 @@ export default function ProductsLayout() {
 
     return (
         <>
-            {/*<SafeAreaProvider>*/}
-            {/*    <SafeAreaView*/}
-            {/*        style={styles.container}>*/}
-            {/*        <Slot/>*/}
-            {/*    </SafeAreaView>*/}
-            {/*</SafeAreaProvider>*/}
             <Stack screenOptions={{
                 headerTitle: () => (
                     <Text style={{fontSize: 18}}>{title}</Text>
@@ -51,13 +45,13 @@ export default function ProductsLayout() {
                     <TouchableHighlight
                         underlayColor="transparent"
                         onPress={() => false}
-                        style={{cursor: 'pointer', marginRight: 15}}>
+                        style={{cursor: 'pointer', marginRight: 0}}>
                         <Ionicons name="cart" size={24}/>
                     </TouchableHighlight>
                 )
             }}>
-                <Stack.Screen name="index"/>
-                <Stack.Screen name="[id]"/>
+                <Stack.Screen name="index" options={{headerShown: false}}/>
+                <Stack.Screen name="[id]" options={{headerShown: false, }}/>
             </Stack>
         </>
     );

@@ -27,24 +27,6 @@ export default function Index() {
 
       return (
         <>
-            {/*<Stack.Screen*/}
-            {/*    options={{*/}
-            {/*        headerTitle: () => (*/}
-            {/*            <Text style={{fontSize: 18}}>Products</Text>*/}
-            {/*        ),*/}
-            {/*        headerTitleAlign: 'left',*/}
-            {/*        headerTintColor: "black",*/}
-            {/*        headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},*/}
-            {/*        headerShown: true,*/}
-            {/*        headerRight: () => (*/}
-            {/*            <TouchableHighlight*/}
-            {/*                underlayColor="transparent"*/}
-            {/*                onPress={()=>false}*/}
-            {/*                style={{cursor: 'pointer', marginRight: 15}}>*/}
-            {/*                <Ionicons name="cart" size={24}/>*/}
-            {/*            </TouchableHighlight>*/}
-            {/*        )*/}
-            {/*    }}/>*/}
           <View style={styles.gridContainer}>
             <FlatList
               data={data.products}

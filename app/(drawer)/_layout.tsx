@@ -5,9 +5,14 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 import {Colors} from "@/constants/Colors";
 import {TouchableHighlight} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {useRouter} from "expo-router";
+import {useSelector} from "react-redux";
+import {Product} from "@/models/product";
 
 export default function DrawerLayout() {
     const colorScheme = useColorScheme();
+    const router = useRouter();
+    const {items}:{items: Product[]}=useSelector((state:any)=>state.cart);
 
     return (
         <GestureHandlerRootView style={{flex: 1}}>
@@ -32,9 +37,12 @@ export default function DrawerLayout() {
                         headerRight: () => (
                             <TouchableHighlight
                                 underlayColor="transparent"
-                                onPress={() => false}
+                                onPress={() => router.push({
+                                    pathname: "/(drawer)/products/cart",
+                                    params: {}
+                                })}
                                 style={{cursor: 'pointer', marginRight: 15}}>
-                                <Ionicons name="cart" size={24}/>
+                                <Ionicons name="cart" color={items && items.length?'brown':'black'} size={24}/>
                             </TouchableHighlight>
                         ),
                     }}

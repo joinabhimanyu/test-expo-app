@@ -33,25 +33,32 @@ export default function ProductsLayout() {
 
     return (
         <>
-            <Stack screenOptions={{
-                headerTitle: () => (
-                    <Text style={{fontSize: 18}}>{title}</Text>
-                ),
-                headerTitleAlign: 'left',
-                headerTintColor: "black",
-                headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
-                headerShown: true,
-                headerRight: () => (
-                    <TouchableHighlight
-                        underlayColor="transparent"
-                        onPress={() => false}
-                        style={{cursor: 'pointer', marginRight: 0}}>
-                        <Ionicons name="cart" size={24}/>
-                    </TouchableHighlight>
-                )
-            }}>
+            <Stack
+            //     screenOptions={{
+            //     headerTitle: () => (
+            //         <Text style={{fontSize: 18}}>{title}</Text>
+            //     ),
+            //     headerTitleAlign: 'left',
+            //     headerTintColor: "black",
+            //     headerStyle: {backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground},
+            //     headerShown: true,
+            //     headerRight: () => (
+            //         <TouchableHighlight
+            //             underlayColor="transparent"
+            //             onPress={() => false}
+            //             style={{cursor: 'pointer', marginRight: 0}}>
+            //             <Ionicons name="cart" size={24}/>
+            //         </TouchableHighlight>
+            //     )
+            // }}
+            >
                 <Stack.Screen name="index" options={{headerShown: false}}/>
                 <Stack.Screen name="[id]" options={{headerShown: false, }}/>
+                <Stack.Screen name="cart/index" options={{
+                    headerShown: false,
+                    presentation: 'modal',
+                    animation: 'slide_from_bottom'
+                }}/>
             </Stack>
         </>
     );

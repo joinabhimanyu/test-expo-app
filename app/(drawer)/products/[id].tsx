@@ -1,6 +1,6 @@
 import {useFetchGeneric} from "@/hooks/api/useFetch";
 import {Product} from "@/models/product";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
     ActivityIndicator,
     View,
@@ -15,11 +15,17 @@ import {Ionicons} from "@expo/vector-icons";
 import {Colors} from "@/constants/Colors";
 import {useColorScheme} from "@/hooks/useColorScheme";
 import Drawer from "expo-router/drawer";
+import {useDispatch, useSelector} from "react-redux";
+import {addItemsToCart} from "@/redux/cart/actions";
 
 export default function ProductDetails() {
 
     const {id} = useLocalSearchParams<{ id: string }>();
-    const colorScheme=useColorScheme()
+    const dispatch = useDispatch();
+    const colorScheme = useColorScheme();
+    const [addToCartDisabled, setAddToCartDisabled] = useState(false);
+    const {items}: { items: Product[] } = useSelector((state: any) => state.cart);
+
     const {loading, error, data, fetchData} = useFetchGeneric<Product>(
         {
             url: `https://dummyjson.com/products/${id}`,
@@ -28,8 +34,21 @@ export default function ProductDetails() {
         });
 
     useEffect(() => {
+        if (items && items.length) {
+            if (items?.find(x => x?.id == data?.id))
+                setAddToCartDisabled(true)
+            else
+                setAddToCartDisabled(false)
+        }
+    }, [items, data]);
+
+    useEffect(() => {
         fetchData();
     }, []);
+
+    const addToCart = () => {
+        dispatch(addItemsToCart(data!!))
+    }
 
     return (
         <>
@@ -67,13 +86,17 @@ export default function ProductDetails() {
                                                     maxWidth: '95%',
                                                     justifyContent: 'center',
                                                     alignItems: 'center',
-                                                    backgroundColor: 'orange',
+                                                    backgroundColor: addToCartDisabled?'gray':'orange',
                                                     alignSelf: 'center',
                                                     borderRadius: 30,
                                                     width: 250,
                                                     height: 45
                                                 }}>
-                                                    <TouchableOpacity><Text>Add
+                                                    <TouchableOpacity
+                                                        disabled={addToCartDisabled}
+                                                        onPress={addToCart}><Text style={{
+                                                            color: addToCartDisabled?'white':'black'
+                                                    }}>Add
                                                         to Cart</Text></TouchableOpacity>
                                                 </View>
 

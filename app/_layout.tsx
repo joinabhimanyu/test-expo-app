@@ -8,6 +8,8 @@ import {useColorScheme} from '@/hooks/useColorScheme';
 import {Stack} from "expo-router";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import {SafeAreaView} from "react-native";
+import {Provider} from "react-redux";
+import store from "@/redux/store";
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();
@@ -25,13 +27,15 @@ export default function RootLayout() {
         return null;
     }
     return (
-        <SafeAreaProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <Stack>
-                    <Stack.Screen name="(drawer)" options={{headerShown: false}}/>
-                    <Stack.Screen name='+not-found'/>
-                </Stack>
-            </ThemeProvider>
-        </SafeAreaProvider>
+        <Provider store={store}>
+            <SafeAreaProvider>
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                    <Stack>
+                        <Stack.Screen name="(drawer)" options={{headerShown: false}}/>
+                        <Stack.Screen name='+not-found'/>
+                    </Stack>
+                </ThemeProvider>
+            </SafeAreaProvider>
+        </Provider>
     );
 }

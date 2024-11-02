@@ -33,6 +33,10 @@ export interface Product {
     images: string[];
 }
 
+export interface PurchasedProduct extends Product {
+    purchasedQuantity: number;
+}
+
 export interface ProductFilter {
     category?: string;
     priceRange?: { min: number; max: number };

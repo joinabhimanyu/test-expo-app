@@ -1,43 +1,77 @@
-import React from 'react'
-import {Alert, Button, FlatList, Image, Text, TouchableOpacity, View} from "react-native";
+import React, {useEffect, useMemo, useState} from 'react'
+import {Alert, Button, FlatList, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Link, useRouter} from "expo-router";
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {Colors} from "@/constants/Colors";
 import {useDispatch, useSelector} from "react-redux";
-import {Product} from "@/models/product";
+import {Product, PurchasedProduct} from "@/models/product";
 import {deleteCart, removeItemsFromCart} from "@/redux/cart/actions";
+import {FontAwesome} from "@expo/vector-icons";
 
 export default function Cart() {
     const router = useRouter()
     const isPresentation = router.canGoBack()
     const colorScheme = useColorScheme()
     const dispatch = useDispatch()
+    const [purchasedItems, setPurchasedItems]=useState<PurchasedProduct[]>([])
     const {items}: { items: Product[] } = useSelector((state: any) => state.cart)
 
-    const calculateTotalCost = () => {
-        let allFinalPrice = 0.0;
+    useEffect(()=>{
         if (items && items.length) {
-            for (const item of items) {
-                const {price, discountPercentage} = item;
+            const pitems: PurchasedProduct[]=items.map((item)=>({
+                ...item,
+                purchasedQuantity: 0
+            }));
+            setPurchasedItems(JSON.parse(JSON.stringify(pitems)))
+        }
+    },[items])
+
+    const setQuantity=(value:number, item:PurchasedProduct)=>{
+        if (value<item.stock) {
+            item.purchasedQuantity=value;
+            setPurchasedItems(purchasedItems)
+        }
+    }
+
+    const incrementQuantity=(item:PurchasedProduct)=>{
+        if (item.purchasedQuantity<item.stock) {
+            item.purchasedQuantity++;
+            console.log(item.purchasedQuantity)
+            setPurchasedItems(purchasedItems)
+        }
+    }
+
+    const decrementQuantity=(item:PurchasedProduct)=>{
+        if (item.purchasedQuantity>0) {
+            item.purchasedQuantity--;
+            setPurchasedItems(purchasedItems)
+        }
+    }
+
+    const calculateTotalCost = useMemo(() => {
+        let allFinalPrice = 0.0;
+        if (purchasedItems && purchasedItems.length) {
+            for (const item of purchasedItems) {
+                const {price, discountPercentage, purchasedQuantity} = item;
                 let finalPrice = price;
                 if (discountPercentage) {
                     const discount = (discountPercentage / 100) * price;
-                    finalPrice = price - discount;
+                    finalPrice = (price - discount)*purchasedQuantity;
                 }
                 allFinalPrice += finalPrice;
             }
         }
         return allFinalPrice.toFixed(2);
-    }
+    },[purchasedItems])
 
     return (
         <>
-            {items && items.length ? (
+            {purchasedItems && purchasedItems.length ? (
                 <>
                     <View style={{flex: 1, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <FlatList
                             keyExtractor={(item, index) => item.id.toString() ?? ""}
-                            data={items}
+                            data={purchasedItems}
                             renderItem={({item}) => {
                                 return (
                                     <View style={{flexDirection: 'column', height: 'auto', width: '100%'}}>
@@ -45,15 +79,38 @@ export default function Cart() {
                                             width: ' 100%',
                                             flex: 1,
                                             flexDirection: 'row',
-                                            alignItems: 'center',
+                                            alignItems: 'flex-start',
                                             justifyContent: 'flex-start',
                                             paddingTop: 20,
                                             paddingLeft: 10
                                         }}>
                                             <Image source={{uri: item.images[0]}} width={50} height={50}/>
-                                            <Text style={{paddingLeft: 20}}>{item.title}</Text>
+                                            <View style={{paddingLeft: 20}}>
+                                                <Text>{item.title}</Text>
+                                                <Text>Stock: {item.stock}</Text>
+                                                <Text>Minimum Order Quantity: {item.minimumOrderQuantity}</Text>
+                                                <Text>Price: {item.price}</Text>
+                                                <View style={{flexDirection:'row', flex:1}}>
+                                                    <Text>Quantity: </Text>
+                                                    <TextInput
+                                                        style={{paddingLeft:20, textAlignVertical:'top'}}
+                                                        keyboardType='numeric'
+                                                        placeholder="enter quantity"
+                                                        onChangeText={(text)=> setQuantity(Number(text), item)}
+                                                        value={item.purchasedQuantity.toFixed(2)}
+                                                        maxLength={10}  //setting limit of input
+                                                    />
+                                                    <TouchableOpacity onPress={()=>incrementQuantity(item)}>
+                                                        <FontAwesome name="plus" style={{paddingLeft:10, paddingTop:5}}/>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity onPress={()=>decrementQuantity(item)}>
+                                                        <FontAwesome name="minus" style={{paddingLeft:10, paddingTop:5}}/>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
                                         </View>
                                         <View style={{
+                                            paddingTop: 10,
                                             width: ' 100%',
                                             flex: 1,
                                             flexDirection: 'row',
@@ -63,7 +120,7 @@ export default function Cart() {
                                             <View style={{
                                                 justifyContent: 'flex-start',
                                                 alignItems: 'center',
-                                                backgroundColor: '#0dcaf0',
+                                                backgroundColor: '#0d6efd',
                                                 alignSelf: 'center',
                                                 borderRadius: 10,
                                                 width: 80,
@@ -79,7 +136,7 @@ export default function Cart() {
                                                             },
                                                             {text: 'OK', onPress: () => dispatch(removeItemsFromCart(item))},
                                                         ]);
-                                                    }}><Text>Delete</Text></TouchableOpacity>
+                                                    }}><Text style={{color:'white'}}>Delete</Text></TouchableOpacity>
                                             </View>
                                             <View style={{
                                                 marginLeft: 10,
@@ -93,7 +150,7 @@ export default function Cart() {
                                                 height: 25
                                             }}>
                                                 <TouchableOpacity
-                                                    onPress={() => false}><Text>Save for
+                                                    onPress={() => false}><Text style={{color:'black'}}>Save for
                                                     later</Text></TouchableOpacity>
                                             </View>
                                         </View>
@@ -133,7 +190,7 @@ export default function Cart() {
                                     },
                                     {text: 'OK', onPress: () => dispatch(deleteCart())},
                                 ]);
-                            }}><Text>Total Cost: {calculateTotalCost()}</Text></Link>
+                            }}><Text>Total Cost: {calculateTotalCost}</Text></Link>
                         </View>
                     </View>
                 </>

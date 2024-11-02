@@ -41,16 +41,30 @@ export default function Index() {
                     <View style={styles.gridContainer}>
                         <View style={{flexDirection: 'row'}}>
                             <TextInput
-                                style={{alignSelf: 'flex-start', flex: 1, paddingBottom: 20, paddingLeft: 30}}
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    flex: 1,
+                                    paddingBottom: 20,
+                                    paddingLeft: 30,
+                                    borderRadius: 30,
+                                    shadowColor: 'gray',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.8,
+                                    shadowRadius: 1,
+                                    elevation: 2,
+                                    textAlign:'justify',
+                                    textAlignVertical:'bottom'
+                            }}
                                 placeholder={`Enter search term`}
                                 onChangeText={(text) => {
                                     console.log(text);
                                 }}/>
-                            <TouchableOpacity onPress={() => {
+                            <TouchableOpacity style={{position:'absolute', right:10, top:15}} onPress={() => {
                                 return false;
                             }}>
                                 <FontAwesome name="search" size={14}/>
                             </TouchableOpacity>
+
                         </View>
 
                         <FlatList

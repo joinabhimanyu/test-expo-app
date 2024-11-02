@@ -73,6 +73,7 @@ export default function ProductDetails() {
                                                 flex: 1,
                                                 maxWidth: '95%',
                                                 paddingTop: 20,
+                                                paddingLeft: 10,
                                                 justifyContent: 'flex-start',
                                                 alignItems: 'flex-start'
                                             }}>

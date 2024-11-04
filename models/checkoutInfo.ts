@@ -13,6 +13,8 @@ export class BillingInformation {
     public cardNumber: string="";
     public expirationDate: string="";
     public cvv: string="";
+    public cardType: string="";
+    public upiId: string="";
     public shippingAddressSameAsBilling: boolean=false;
     // constructor to initialize the billing information object with provided parameters
     constructor(

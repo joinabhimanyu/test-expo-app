@@ -45,7 +45,6 @@ export default function Index() {
         if(items.find(x=>x.id==item.id)){
             disabled=true;
         }
-        console.log('disabled for item id: ', item.id, 'disabled: ', disabled);
         return (
             <TouchableOpacity style={{
                 backgroundColor: `${disabled?'gray':'orange'}`,

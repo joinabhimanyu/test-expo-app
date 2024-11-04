@@ -46,9 +46,7 @@ export default function Checkout() {
             && billingInformation.country
             && billingInformation.phoneNumber
             && billingInformation.email
-            && billingInformation.cardNumber
-            && billingInformation.expirationDate
-            && billingInformation.cvv
+
             && shippingInformation && shippingInformation.firstName
             && shippingInformation.lastName
             && shippingInformation.addressLine1
@@ -58,7 +56,13 @@ export default function Checkout() {
             && shippingInformation.zipCode
             && shippingInformation.country
             && shippingInformation.phoneNumber
-    }, [billingInformation, shippingInformation]);
+        && paymentMethod
+        && ((paymentMethod=="card" && billingInformation.cardNumber
+                && billingInformation.expirationDate
+                && billingInformation.cvv
+                && billingInformation.cardType) ||
+            (paymentMethod=="upi" && billingInformation.upiId));
+    }, [billingInformation, shippingInformation, paymentMethod]);
 
     useEffect(() => {
         if (billingInformation?.shippingAddressSameAsBilling) {

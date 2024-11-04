@@ -1,5 +1,5 @@
 import {useFetchGeneric} from "@/hooks/api/useFetch";
-import {ProductResponse} from "@/models/product";
+import {Product, ProductResponse, PurchasedProduct} from "@/models/product";
 import React, {useEffect, useMemo} from "react";
 import {
     Text,
@@ -16,11 +16,15 @@ import baseStyles from "../../../styles/baseStyles";
 import {Stack, useRouter} from "expo-router";
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {FontAwesome} from "@expo/vector-icons";
+import {useDispatch, useSelector} from "react-redux";
+import {addItemsToCart} from "@/redux/cart/actions";
 
 export default function Index() {
 
     const router = useRouter();
-    const colorScheme = useColorScheme()
+    const colorScheme = useColorScheme();
+    const dispatch=useDispatch();
+    const {items}:{items: PurchasedProduct[]}=useSelector((state:any)=>state.cart);
     const {loading, error, data, fetchData} = useFetchGeneric<ProductResponse>(
         {
             url: 'https://dummyjson.com/products',
@@ -31,6 +35,35 @@ export default function Index() {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        console.log('items changed');
+    }, [items]);
+
+    const renderAddToCartButton=(item: Product)=>{
+        let disabled=false;
+        if(items.find(x=>x.id==item.id)){
+            disabled=true;
+        }
+        console.log('disabled for item id: ', item.id, 'disabled: ', disabled);
+        return (
+            <TouchableOpacity style={{
+                backgroundColor: `${disabled?'gray':'orange'}`,
+                paddingTop: 10,
+                paddingBottom: 10,
+                borderRadius: 20,
+                marginTop: 10,
+                width: 150,
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'flex-end',
+            }} disabled={disabled} onPress={()=>{
+                dispatch(addItemsToCart(item));
+            }}>
+                <Text style={{color: 'white'}}>Add to Cart</Text>
+            </TouchableOpacity>
+        )
+    };
 
 
     const renderFlatList = useMemo(() => {
@@ -47,11 +80,11 @@ export default function Index() {
                                     paddingBottom: 20,
                                     paddingLeft: 30,
                                     borderRadius: 30,
-                                    shadowColor: 'gray',
+                                    shadowColor: '#d3d2d2',
                                     shadowOffset: { width: 0, height: 1 },
-                                    shadowOpacity: 0.8,
+                                    shadowOpacity: 1,
                                     shadowRadius: 1,
-                                    elevation: 2,
+                                    elevation: 1,
                                     textAlign:'justify',
                                     textAlignVertical:'bottom'
                             }}
@@ -70,7 +103,7 @@ export default function Index() {
                         <FlatList
                             data={data.products}
                             renderItem={({item}) => (
-                                <TouchableHighlight underlayColor="transparent" onPress={() => {
+                                <TouchableOpacity onPress={() => {
                                     router.push({
                                         pathname: '/(drawer)/products/[id]',
                                         params: {id: item.id},
@@ -82,11 +115,19 @@ export default function Index() {
                                             <>
                                                 <Image width={80} height={80}
                                                        source={{uri: item.images[0]}}/>
-                                                <Text style={{flex: 0.9, marginLeft: 20}}>{item.description}</Text>
+                                                <View style={{flex:0.95, paddingLeft: 15, paddingTop: 10}}>
+                                                    <Text style={{fontWeight:'bold'}}>{item.title}</Text>
+                                                    <Text>{item.description}</Text>
+                                                    <Text style={{marginTop: 10}}>Price: {item.price}</Text>
+                                                    <Text>Shipping: {item.shippingInformation}</Text>
+                                                    <Text>Availability: {item.availabilityStatus}</Text>
+                                                    {renderAddToCartButton(item)}
+                                                </View>
+
                                             </>
                                         ) : null}
                                     </View>
-                                </TouchableHighlight>
+                                </TouchableOpacity>
                             )}
                             keyExtractor={(item, index) => item.description ?? ""}
                         />
@@ -99,7 +140,7 @@ export default function Index() {
         return (
             <View style={baseStyles.error}><Text>No data found</Text></View>
         )
-    }, [data]);
+    }, [data, items]);
 
     return (
         <>
@@ -139,7 +180,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: "100%",
         justifyContent: "flex-start",
-        alignItems: "center",
+        alignItems: "flex-start",
         flexDirection: "row",
         flexWrap: "nowrap"
     },

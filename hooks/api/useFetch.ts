@@ -23,14 +23,16 @@ const makeRequest = async (req: RequestOptions) => new Promise<any>((resolve, re
                 reject(new Error(`HTTP error! status: ${res.status}`));
             }
             resolve(res.json());
-        });
+        }).catch(err => {
+        reject(new Error(`HTTP error! status: 400`));
+    });
 });
 export const useFetch = (req: RequestOptions) => {
     // implementation of useFetch hook
     // return loading, error, and data
     // remember to handle response, error, and loading states
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<boolean|any>(false);
     const [data, setData] = useState(null);
 
     const fetchData = async () => {
@@ -41,7 +43,7 @@ export const useFetch = (req: RequestOptions) => {
             setData(response);
             setError(false);
         } catch (error) {
-            setError(true);
+            setError(error);
             setData(null);
         } finally {
             setLoading(false);
@@ -62,7 +64,7 @@ interface ResponseOptions<T> {
 
 export const useFetchGeneric = <T>(req: RequestOptions): ResponseOptions<T | null> => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<boolean|any>(false);
     const [data, setData] = useState<T | null>(null);
 
     const fetchData = async () => {
@@ -73,7 +75,7 @@ export const useFetchGeneric = <T>(req: RequestOptions): ResponseOptions<T | nul
             setData(response);
             setError(false);
         } catch (error) {
-            setError(true);
+            setError(error);
             setData(null);
         } finally {
             setLoading(false);

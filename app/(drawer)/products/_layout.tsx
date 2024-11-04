@@ -59,6 +59,7 @@ export default function ProductsLayout() {
                     presentation: 'modal',
                     animation: 'slide_from_bottom'
                 }}/>
+                <Stack.Screen name="cart/checkout" options={{headerShown: false}}/>
             </Stack>
         </>
     );

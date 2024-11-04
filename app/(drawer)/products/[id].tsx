@@ -1,5 +1,5 @@
 import {useFetchGeneric} from "@/hooks/api/useFetch";
-import {Product} from "@/models/product";
+import {Product, PurchasedProduct} from "@/models/product";
 import React, {useEffect, useState} from "react";
 import {
     ActivityIndicator,
@@ -24,7 +24,7 @@ export default function ProductDetails() {
     const dispatch = useDispatch();
     const colorScheme = useColorScheme();
     const [addToCartDisabled, setAddToCartDisabled] = useState(false);
-    const {items}: { items: Product[] } = useSelector((state: any) => state.cart);
+    const {items}: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
 
     const {loading, error, data, fetchData} = useFetchGeneric<Product>(
         {
@@ -96,7 +96,7 @@ export default function ProductDetails() {
                                                     <TouchableOpacity
                                                         disabled={addToCartDisabled}
                                                         onPress={addToCart}><Text style={{
-                                                            color: addToCartDisabled?'white':'black'
+                                                            color: 'white'
                                                     }}>Add
                                                         to Cart</Text></TouchableOpacity>
                                                 </View>

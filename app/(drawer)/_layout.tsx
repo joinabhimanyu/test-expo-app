@@ -7,13 +7,13 @@ import {TouchableHighlight} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {usePathname, useRouter} from "expo-router";
 import {useSelector} from "react-redux";
-import {Product} from "@/models/product";
+import {Product, PurchasedProduct} from "@/models/product";
 
 export default function DrawerLayout() {
     const colorScheme = useColorScheme();
     const router = useRouter();
     const pathname=usePathname();
-    const {items}:{items: Product[]}=useSelector((state:any)=>state.cart);
+    const {items}:{items: PurchasedProduct[]}=useSelector((state:any)=>state.cart);
 
     return (
         <GestureHandlerRootView style={{flex: 1}}>

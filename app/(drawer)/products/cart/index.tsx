@@ -1,13 +1,14 @@
-import React, {useEffect, useMemo, useState} from 'react'
-import {Alert, Button, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {Link, useRouter} from "expo-router";
-import {useColorScheme} from "@/hooks/useColorScheme";
-import {Colors} from "@/constants/Colors";
-import {useDispatch, useSelector} from "react-redux";
-import {Product, PurchasedProduct} from "@/models/product";
-import {deleteCart, removeItemsFromCart, setCart} from "@/redux/cart/actions";
-import {FontAwesome} from "@expo/vector-icons";
-import {Collapsible} from "@/components/Collapsible";
+import React, { useEffect, useMemo, useState } from 'react'
+import { Alert, Button, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Colors } from "@/constants/Colors";
+import { useDispatch, useSelector } from "react-redux";
+import { Product, PurchasedProduct } from "@/models/product";
+import { deleteCart, removeItemsFromCart, setCart } from "@/redux/cart/actions";
+import { FontAwesome } from "@expo/vector-icons";
+import { Collapsible } from "@/components/Collapsible";
+import baseStyles from '@/styles/baseStyles';
 
 export default function Cart() {
     const router = useRouter()
@@ -15,7 +16,7 @@ export default function Cart() {
     const colorScheme = useColorScheme()
     const dispatch = useDispatch()
 
-    const {items}: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart)
+    const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart)
 
 
     const setQuantity = (value: number, item: PurchasedProduct) => {
@@ -49,7 +50,7 @@ export default function Cart() {
         let allFinalPrice = 0.0;
         if (items && items.length) {
             for (const item of items) {
-                const {price, discountPercentage, purchasedQuantity} = item;
+                const { price, discountPercentage, purchasedQuantity } = item;
                 let finalPrice = price;
                 if (discountPercentage) {
                     const discount = (discountPercentage / 100) * price;
@@ -65,13 +66,13 @@ export default function Cart() {
         <>
             {items && items.length ? (
                 <>
-                    <View style={{flex: 1, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                    <View style={{ flex: 1, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <FlatList
                             keyExtractor={(item, index) => item.id.toString() ?? ""}
                             data={items}
-                            renderItem={({item}) => {
+                            renderItem={({ item }) => {
                                 return (
-                                    <View style={{flexDirection: 'column', height: 'auto', width: '100%'}}>
+                                    <View style={{ flexDirection: 'column', height: 'auto', width: '100%' }}>
                                         <View style={{
                                             width: ' 100%',
                                             flex: 1,
@@ -81,8 +82,8 @@ export default function Cart() {
                                             paddingTop: 20,
                                             paddingLeft: 10
                                         }}>
-                                            <Image source={{uri: item.images[0]}} width={50} height={50}/>
-                                            <View style={{paddingLeft: 20}}>
+                                            <Image source={{ uri: item.images[0] }} width={50} height={50} />
+                                            <View style={{ paddingLeft: 20 }}>
                                                 <Text style={styles.title}>{item.title}</Text>
                                                 <Text style={styles.texts}>Stock: {item.stock}</Text>
                                                 <Text style={styles.texts}>Price: {item.price}</Text>
@@ -92,10 +93,10 @@ export default function Cart() {
                                                 <Text style={styles.texts}>{item.shippingInformation}</Text>
                                                 <Text style={styles.texts}>{item.availabilityStatus}</Text>
                                                 <Text style={styles.texts}>{item.returnPolicy}</Text>
-                                                <View style={{flexDirection: 'row', flex: 1, paddingTop: 10}}>
+                                                <View style={{ flexDirection: 'row', flex: 1, paddingTop: 10 }}>
                                                     <Text>Quantity: </Text>
                                                     <TextInput
-                                                        style={{paddingLeft: 20, textAlignVertical: 'top'}}
+                                                        style={{ paddingLeft: 20, textAlignVertical: 'top' }}
                                                         keyboardType='numeric'
                                                         placeholder="enter quantity"
                                                         onChangeText={(text) => setQuantity(Number(text), item)}
@@ -104,11 +105,11 @@ export default function Cart() {
                                                     />
                                                     <TouchableOpacity onPress={() => incrementQuantity(item)}>
                                                         <FontAwesome name="plus"
-                                                                     style={{paddingLeft: 10, paddingTop: 5}}/>
+                                                            style={{ paddingLeft: 10, paddingTop: 5 }} />
                                                     </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => decrementQuantity(item)}>
                                                         <FontAwesome name="minus"
-                                                                     style={{paddingLeft: 10, paddingTop: 5}}/>
+                                                            style={{ paddingLeft: 10, paddingTop: 5 }} />
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -121,58 +122,49 @@ export default function Cart() {
                                             alignItems: 'center',
                                             justifyContent: 'flex-end',
                                         }}>
-                                            <View style={{
-                                                justifyContent: 'flex-start',
-                                                alignItems: 'center',
-                                                backgroundColor: '#0d6efd',
-                                                alignSelf: 'center',
-                                                borderRadius: 10,
-                                                width: 80,
-                                                height: 25
-                                            }}>
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        Alert.alert('Confirm Delete', 'Delete item from cart', [
-                                                            {
-                                                                text: 'Cancel',
-                                                                onPress: () => console.log('Cancel Pressed'),
-                                                                style: 'cancel',
-                                                            },
-                                                            {
-                                                                text: 'OK',
-                                                                onPress: () => dispatch(removeItemsFromCart(item))
-                                                            },
-                                                        ]);
-                                                    }}><Text style={{color: 'white'}}>Delete</Text></TouchableOpacity>
-                                            </View>
-                                            <View style={{
-                                                marginLeft: 10,
-                                                marginRight: 20,
-                                                justifyContent: 'flex-start',
-                                                alignItems: 'center',
-                                                backgroundColor: '#fd7e14',
-                                                alignSelf: 'center',
-                                                borderRadius: 10,
-                                                width: 120,
-                                                height: 25
-                                            }}>
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        Alert.alert('Confirm Save', 'Do you want to save item for later', [
-                                                            {
-                                                                text: 'Cancel',
-                                                                onPress: () => console.log('Cancel Pressed'),
-                                                                style: 'cancel',
-                                                            },
-                                                            {text: 'OK', onPress: () => false},
-                                                        ]);
-                                                    }}><Text style={{color: 'black'}}>Save for
+                                            <TouchableOpacity
+                                                style={[baseStyles.primaryButton, {
+                                                    backgroundColor: Colors[colorScheme ?? 'light'].primary,
+                                                    alignSelf: 'center',
+                                                    width: 100,
+
+                                                }]}
+                                                onPress={() => {
+                                                    Alert.alert('Confirm Delete', 'Delete item from cart', [
+                                                        {
+                                                            text: 'Cancel',
+                                                            onPress: () => console.log('Cancel Pressed'),
+                                                            style: 'cancel',
+                                                        },
+                                                        {
+                                                            text: 'OK',
+                                                            onPress: () => dispatch(removeItemsFromCart(item))
+                                                        },
+                                                    ]);
+                                                }}><Text style={{ color: 'white' }}>Delete</Text></TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={[baseStyles.primaryButton, {
+                                                    backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColor,
+                                                    alignSelf: 'center',
+                                                    width: 130,
+                                                    marginLeft: 10,
+                                                    marginRight: 10
+                                                }]}
+                                                onPress={() => {
+                                                    Alert.alert('Confirm Save', 'Do you want to save item for later', [
+                                                        {
+                                                            text: 'Cancel',
+                                                            onPress: () => console.log('Cancel Pressed'),
+                                                            style: 'cancel',
+                                                        },
+                                                        { text: 'OK', onPress: () => false },
+                                                    ]);
+                                                }}><Text style={{ color: 'black' }}>Save for
                                                     later</Text></TouchableOpacity>
-                                            </View>
                                         </View>
                                     </View>
                                 )
-                            }}/>
+                            }} />
                     </View>
                     <View style={{
                         flexDirection: 'row',
@@ -183,13 +175,13 @@ export default function Cart() {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         shadowColor: 'gray',
-                        shadowOffset: {width: 0, height: 1},
+                        shadowOffset: { width: 0, height: 1 },
                         shadowOpacity: 1,
                         shadowRadius: 1,
                         elevation: 1.5,
                         borderStyle: 'solid',
                     }}>
-                        <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 0.5}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 0.5 }}>
                             {isPresentation ? <Link href="../" style={{
                                 color: Colors[colorScheme ?? 'light'].primary
                             }}><Text>Dismiss</Text></Link> : null}
@@ -206,47 +198,47 @@ export default function Cart() {
                                         onPress: () => console.log('Cancel Pressed'),
                                         style: 'cancel',
                                     },
-                                    {text: 'OK', onPress: () => dispatch(deleteCart())},
+                                    { text: 'OK', onPress: () => dispatch(deleteCart()) },
                                 ]);
                             }}><Text>Clear</Text></Link>
                         </View>
-                        <View style={{flexDirection: 'row', justifyContent: 'flex-end', flex: 0.5}}>
-                            <Link href="../" style={{color: Colors[colorScheme ?? 'light'].secondary,}}
-                                  onPress={(event) => {
-                                      event.preventDefault();
-                                      event.stopPropagation();
-                                      let valid=true;
-                                      for (const item of items) {
-                                          if(item.purchasedQuantity==0.00) {
-                                              valid=false;
-                                              break;
-                                          }
-                                      }
-                                      if(valid) {
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 0.5 }}>
+                            <Link href="../" style={{ color: Colors[colorScheme ?? 'light'].secondary, }}
+                                onPress={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    let valid = true;
+                                    for (const item of items) {
+                                        if (item.purchasedQuantity == 0.00) {
+                                            valid = false;
+                                            break;
+                                        }
+                                    }
+                                    if (valid) {
 
-                                          Alert.alert('Checkout', 'Do you want to check out these items', [
-                                              {
-                                                  text: 'Cancel',
-                                                  onPress: () => console.log('Cancel Pressed'),
-                                                  style: 'cancel',
-                                              },
-                                              {
-                                                  text: 'OK', onPress: () => {
-                                                      router.push({
-                                                          pathname: '/(drawer)/products/cart/checkout'
-                                                      })
-                                                  }
-                                              },
-                                          ]);
-                                      } else {
-                                          Alert.alert("Alert", "Please select quantity of all items")
-                                      }
-                                  }}><Text>Total Cost: {calculateTotalCost}</Text></Link>
+                                        Alert.alert('Checkout', 'Do you want to check out these items', [
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => console.log('Cancel Pressed'),
+                                                style: 'cancel',
+                                            },
+                                            {
+                                                text: 'OK', onPress: () => {
+                                                    router.push({
+                                                        pathname: '/(drawer)/products/cart/checkout'
+                                                    })
+                                                }
+                                            },
+                                        ]);
+                                    } else {
+                                        Alert.alert("Alert", "Please select quantity of all items")
+                                    }
+                                }}><Text>Total Cost: {calculateTotalCost}</Text></Link>
                         </View>
                     </View>
                 </>
             ) : (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text>There are no items in cart</Text>
                     {isPresentation ? <Link href="../" style={{
                         color: Colors[colorScheme ?? 'light'].stackHeaderBackground

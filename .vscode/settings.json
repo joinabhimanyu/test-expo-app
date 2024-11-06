@@ -1,3 +1,7 @@
 {
-    "avdmanager.sdkPath": "c:\\Users\\achak\\AppData\\Local\\Android\\Sdk"
+    "avdmanager.sdkPath": "c:\\Users\\achak\\AppData\\Local\\Android\\Sdk",
+    "workbench.tree.indent": 16,
+    "workbench.colorCustomizations": {
+        "tree.indentGuidesStroke": "#00ff00"
+    }
 }

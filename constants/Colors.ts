@@ -6,6 +6,7 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
+
 export const Colors = {
   light: {
     text: '#11181C',
@@ -18,7 +19,9 @@ export const Colors = {
     primary: '#0499c2',
     secondary: '#051b28',
     drawerActiveBackgroundColor: "#C6F3CA",
-    drawerActiveTintColor: "#12B886"
+    drawerActiveTintColor: "#12B886",
+    primaryButtonColor: '#eb983a',
+    primaryButtonColorDisabled: '#949494'
   },
   dark: {
     text: '#ECEDEE',
@@ -31,6 +34,8 @@ export const Colors = {
     primary: '#0499c2',
     secondary: '#051b28',
     drawerActiveBackgroundColor: "#C6F3CA",
-    drawerActiveTintColor: "#12B886"
+    drawerActiveTintColor: "#12B886",
+    primaryButtonColor: '#eb983a',
+    primaryButtonColorDisabled: '#949494'
   },
 };

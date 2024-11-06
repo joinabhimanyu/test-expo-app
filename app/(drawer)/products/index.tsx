@@ -18,6 +18,7 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 import {FontAwesome} from "@expo/vector-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {addItemsToCart} from "@/redux/cart/actions";
+import { Colors } from "@/constants/Colors";
 
 export default function Index() {
 
@@ -46,17 +47,13 @@ export default function Index() {
             disabled=true;
         }
         return (
-            <TouchableOpacity style={{
-                backgroundColor: `${disabled?'gray':'orange'}`,
-                paddingTop: 10,
-                paddingBottom: 10,
-                borderRadius: 20,
-                marginTop: 10,
-                width: 150,
-                justifyContent: 'center',
-                alignItems: 'center',
+            <TouchableOpacity style={[baseStyles.primaryButton, {
+                backgroundColor: disabled?Colors[colorScheme??'light'].primaryButtonColorDisabled:Colors[colorScheme??'light'].primaryButtonColor,
                 alignSelf: 'flex-end',
-            }} disabled={disabled} onPress={()=>{
+                width: 150,
+                marginBottom: 0
+
+            }]} disabled={disabled} onPress={()=>{
                 dispatch(addItemsToCart(item));
             }}>
                 <Text style={{color: 'white'}}>Add to Cart</Text>
@@ -79,13 +76,13 @@ export default function Index() {
                                     paddingBottom: 20,
                                     paddingLeft: 30,
                                     borderRadius: 30,
-                                    shadowColor: '#d3d2d2',
-                                    shadowOffset: { width: 0, height: 1 },
-                                    shadowOpacity: 1,
-                                    shadowRadius: 1,
-                                    elevation: 1,
                                     textAlign:'justify',
-                                    textAlignVertical:'bottom'
+                                    textAlignVertical:'bottom',
+                                    shadowColor: '#c4c4c4',
+                                    shadowOffset: { width: 0, height: 2 },
+                                    shadowOpacity: 0.25,
+                                    shadowRadius: 3.84,
+                                    elevation: 5,
                             }}
                                 placeholder={`Enter search term`}
                                 onChangeText={(text) => {

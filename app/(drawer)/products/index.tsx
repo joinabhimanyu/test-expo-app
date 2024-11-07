@@ -37,10 +37,7 @@ export default function Index() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        console.log('items changed');
-    }, [items]);
-
+    
     const renderAddToCartButton=(item: Product)=>{
         let disabled=false;
         if(items.find(x=>x.id==item.id)){

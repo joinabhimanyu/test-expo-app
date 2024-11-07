@@ -42,7 +42,7 @@ export function HelloWave() {
     }))
 
     return (
-        <Animated.View style={{...animatedStyle}}>
+        <Animated.View style={animatedStyle}>
             {/*<ThemedText style={styles.text}>👋</ThemedText>*/}
             <AnimatedFontAwesome name="check-circle" size={300} animatedProps={animatedProps} />
         </Animated.View>

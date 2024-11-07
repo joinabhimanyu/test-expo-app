@@ -15,8 +15,6 @@ export default function ProductsLayout() {
 
 
     useEffect(() => {
-        console.log('route change event fired')
-        console.log('pathname: ', pathname)
         for (const key of Object.keys(Routes?.routeMap)) {
             if (Routes?.routeMap[key] && Routes?.routeMap[key].pattern && Routes?.routeMap[key].pattern.test(pathname??"")) {
                 setTitle(Routes?.routeMap[key].title);

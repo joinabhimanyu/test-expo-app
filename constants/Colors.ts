@@ -21,7 +21,9 @@ export const Colors = {
     drawerActiveBackgroundColor: "#C6F3CA",
     drawerActiveTintColor: "#12B886",
     primaryButtonColor: '#eb983a',
-    primaryButtonColorDisabled: '#949494'
+    primaryButtonColorDisabled: '#949494',
+    imageBorderColor:'#fff',
+    imageBackgroundColor:'#fff'
   },
   dark: {
     text: '#ECEDEE',
@@ -36,6 +38,8 @@ export const Colors = {
     drawerActiveBackgroundColor: "#C6F3CA",
     drawerActiveTintColor: "#12B886",
     primaryButtonColor: '#eb983a',
-    primaryButtonColorDisabled: '#949494'
+    primaryButtonColorDisabled: '#949494',
+    imageBorderColor:'#fff',
+    imageBackgroundColor:'#fff'
   },
 };

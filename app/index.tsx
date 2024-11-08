@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import baseStyles from '@/styles/baseStyles'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated'
 
 const Home = () => {
@@ -12,6 +12,8 @@ const Home = () => {
     const { width } = Dimensions.get('screen');
     const fontsize = useSharedValue(0);
     const marginTop = useSharedValue(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const router=useRouter();
 
     useEffect(() => {
 
@@ -130,6 +132,13 @@ const Home = () => {
 
     const onLoginPressHandler = () => {
         // Handle login logic here
+        setIsLoading(true);
+        setTimeout(() => {
+            setIsLoading(false);
+            router.navigate({
+                pathname: '/(drawer)/products'
+            })
+        }, 1000);
     }
 
     return (
@@ -145,7 +154,7 @@ const Home = () => {
                         placeholder='Enter user name'
                         onFocus={onFocusUserNameHandler}
                         onBlur={onBlurUserNameHandler}
-                        style={[ styles.field]} />
+                        style={[styles.field]} />
 
                     <View style={{ position: 'absolute', right: 10, top: 15 }}>
 
@@ -163,7 +172,7 @@ const Home = () => {
                         placeholder='Enter password'
                         onFocus={onFocusPasswordHandler}
                         onBlur={onBlurPasswordHandler}
-                        secureTextEntry={true} style={[ styles.field]} />
+                        secureTextEntry={true} style={[styles.field]} />
 
                     <View style={{ position: 'absolute', right: 10, top: 15 }}>
 
@@ -190,9 +199,13 @@ const Home = () => {
             </View>
 
             <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {
-                backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColor,
+                backgroundColor: Colors[colorScheme ?? 'light'].text,
             }]}>
-                <Text style={{ color: 'white' }}>Login</Text>
+                {isLoading ? (
+                    <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                ) : (
+                    <Text style={{ color: 'white' }}>Login</Text>
+                )}
             </TouchableOpacity>
         </View>
     )

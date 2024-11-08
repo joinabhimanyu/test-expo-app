@@ -13,7 +13,7 @@ const CustomDrawerContent = (props: any) => {
         <DrawerContentScrollView contentContainerStyle={styles.drawer} {...props}>
             <View style={styles.logoContainer}>
                 <Image
-                    source={require("@/assets/images/icon.png")}
+                    source={require("@/assets/images/react-logo.png")}
                     style={styles.img} />
             </View>
             <SafeAreaView style={{ flex: 1 }}>

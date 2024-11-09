@@ -182,28 +182,44 @@ export default function Cart() {
                         borderStyle: 'solid',
                     }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 0.5 }}>
-                            {isPresentation ? <Link href="../" style={{
+                            {/* {isPresentation ? <Link href="../" style={{
                                 color: Colors[colorScheme ?? 'light'].primary
-                            }}><Text>Dismiss</Text></Link> : null}
-                            <Link href="/" style={{
-                                color: Colors[colorScheme ?? 'light'].primary,
-                                pointerEvents: 'none',
-                                paddingLeft: 15
-                            }} onPress={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                Alert.alert('Confirm Delete', 'Delete all items from cart', [
-                                    {
-                                        text: 'Cancel',
-                                        onPress: () => console.log('Cancel Pressed'),
-                                        style: 'cancel',
-                                    },
-                                    { text: 'OK', onPress: () => dispatch(deleteCart()) },
-                                ]);
-                            }}><Text>Clear</Text></Link>
+                            }}><Text>Dismiss</Text></Link> : null} */}
+                            <TouchableOpacity
+                                style={[baseStyles.primaryButton, {
+                                    backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColorDisabled,
+                                    width: 100,
+                                    marginTop: 0,
+                                    marginBottom: 0,
+                                    paddingTop: 10,
+                                    paddingBottom: 10,
+                                }]}
+                                onPress={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    Alert.alert('Confirm Delete', 'Delete all items from cart', [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log('Cancel Pressed'),
+                                            style: 'cancel',
+                                        },
+                                        { text: 'OK', onPress: () => dispatch(deleteCart()) },
+                                    ]);
+                                }}>
+                                <Text style={{ color: 'white' }}>Clear</Text>
+                            </TouchableOpacity>
+                            
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 0.5 }}>
-                            <Link href="../" style={{ color: Colors[colorScheme ?? 'light'].secondary, }}
+                            <TouchableOpacity
+                                style={[baseStyles.primaryButton, {
+                                    backgroundColor: Colors[colorScheme ?? 'light'].primary,
+                                    width: 100,
+                                    marginTop: 0,
+                                    marginBottom: 0,
+                                    paddingTop: 10,
+                                    paddingBottom: 10,
+                                }]}
                                 onPress={(event) => {
                                     event.preventDefault();
                                     event.stopPropagation();
@@ -233,16 +249,18 @@ export default function Cart() {
                                     } else {
                                         Alert.alert("Alert", "Please select quantity of all items")
                                     }
-                                }}><Text>Total Cost: {calculateTotalCost}</Text></Link>
+                                }}>
+                                <Text style={{ color: 'white' }}>Checkout</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </>
             ) : (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text>There are no items in cart</Text>
-                    {isPresentation ? <Link href="../" style={{
+                    {/* {isPresentation ? <Link href="../" style={{
                         color: Colors[colorScheme ?? 'light'].stackHeaderBackground
-                    }}><Text>Dismiss</Text></Link> : null}
+                    }}><Text>Dismiss</Text></Link> : null} */}
                 </View>
             )}
         </>

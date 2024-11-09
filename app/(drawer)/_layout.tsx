@@ -21,7 +21,7 @@ export default function DrawerLayout() {
             <Drawer
                 drawerContent={(props) => <CustomDrawerContent {...props} />}
                 screenOptions={{
-                    headerShown: true,
+                    headerShown: false,
                     headerTitleAlign: 'left',
                     headerTintColor: "black",
                     headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground },
@@ -36,21 +36,6 @@ export default function DrawerLayout() {
                         title: "Products",
                         drawerIcon: ({ color }) => (
                             <FontAwesome name="home" size={20} color={color} />
-                        ),
-                        headerRight: () => (
-                            <TouchableHighlight
-                                underlayColor="transparent"
-                                onPress={() => {
-                                    if (pathname !== '/products/cart') {
-                                        router.push({
-                                            pathname: "/products/cart",
-                                            params: {}
-                                        })
-                                    }
-                                }}
-                                style={{ cursor: 'pointer', marginRight: 15 }}>
-                                <Ionicons name="cart" color={items && items.length ? Colors[colorScheme??'light'].primary : Colors[colorScheme??'light'].secondary} size={24} />
-                            </TouchableHighlight>
                         ),
                     }}
                 />

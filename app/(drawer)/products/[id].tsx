@@ -19,7 +19,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import Drawer from "expo-router/drawer";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemsToCart } from "@/redux/cart/actions";
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, { interpolate, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import CarouselListItem from "@/components/CarouselListItem";
 

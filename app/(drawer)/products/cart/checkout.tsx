@@ -10,6 +10,7 @@ import { deleteCart } from "@/redux/cart/actions";
 import baseStyles from '@/styles/baseStyles';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function Checkout() {
     const [billingInformation, setBillingInformation] = useState(new BillingInformation());
@@ -285,9 +286,12 @@ export default function Checkout() {
                                     <>
                                         <View style={styles.fieldContainer}>
                                             <Text style={styles.fieldLabel}>Card Number:</Text>
-                                            <TextInput style={{ paddingLeft: 10 }} placeholder="Enter Card No"
+                                            <MaskedTextInput
+                                                style={{ paddingLeft: 10 }}
+                                                placeholder="Enter Card No"
+                                                mask='9999-9999-9999'
                                                 keyboardType="number-pad"
-                                                maxLength={12}
+                                                maxLength={14}
                                                 value={billingInformation?.cardNumber}
                                                 onChangeText={(text) => onChangeBillingHandler(text, "cardNumber")} />
                                         </View>
@@ -315,8 +319,12 @@ export default function Checkout() {
                                         </View>
                                         <View style={styles.fieldContainer}>
                                             <Text style={styles.fieldLabel}>Expiration Date:</Text>
-                                            <TextInput style={{ paddingLeft: 10 }} placeholder="Enter Expiration date"
+                                            <MaskedTextInput
+                                                style={{ paddingLeft: 10 }}
+                                                placeholder="Enter Expiration date"
+                                                mask='99/99/9999'
                                                 keyboardType="number-pad"
+                                                maxLength={10}
                                                 value={billingInformation?.expirationDate}
                                                 onChangeText={(text) => onChangeBillingHandler(text, "expirationDate")} />
                                         </View>

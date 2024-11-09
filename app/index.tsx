@@ -1,19 +1,35 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, Alert }
+    from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import baseStyles from '@/styles/baseStyles'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Link, useRouter } from 'expo-router'
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated'
+
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withSequence,
+    withSpring,
+    withTiming
+} from 'react-native-reanimated'
+
+import createAnimatedComponent = Animated.createAnimatedComponent;
 
 const Home = () => {
     const colorScheme = useColorScheme();
     const { width } = Dimensions.get('screen');
     const fontsize = useSharedValue(0);
     const marginTop = useSharedValue(0);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const router=useRouter();
+    const router = useRouter();
+    const AnimatedIonicons = createAnimatedComponent(Ionicons);
+    const rotationAnimation = useSharedValue(0);
 
     useEffect(() => {
 
@@ -59,6 +75,10 @@ const Home = () => {
 
     }, []);
 
+    const animatedIconStyle = useAnimatedStyle(() => ({
+        transform: [{ rotate: `${rotationAnimation.value}deg` }],
+    }))
+
     const animatedStyle = useAnimatedStyle(() => ({
         fontSize: fontsize.value
     }))
@@ -96,8 +116,9 @@ const Home = () => {
         },
         fontText: {
             // fontSize: 40,
+            letterSpacing: 1.5,
             fontFamily: 'HelveticaLight',
-            fontWeight: 600,
+            fontWeight: 400,
             color: 'black',
             textShadowColor: 'gray',
             textShadowOffset: { width: 2, height: 2 },
@@ -107,6 +128,7 @@ const Home = () => {
 
     const [showCloseIconUsername, setShowCloseIconUsername] = useState(false);
     const [showCloseIconPassword, setShowCloseIconPassword] = useState(false);
+    const [showSecurePassword, setShowSecurePassword] = useState(false);
 
     const onFocusUserNameHandler = () => {
         setShowCloseIconUsername(true)
@@ -124,21 +146,33 @@ const Home = () => {
         setShowCloseIconPassword(false)
     }
 
-    const clearUserNameHandler = () => false
+    const clearUserNameHandler = () => setUsername('')
 
-    const clearPasswordHandler = () => false
+    const clearPasswordHandler = () => setPassword('')
 
-    const showPasswordHandler = () => false
+    const showPasswordHandler = () => {
+        if (showSecurePassword) {
+            rotationAnimation.value = withTiming(0, withSpring({ duration: 50 }));
+
+        } else {
+            rotationAnimation.value = withTiming(90, withSpring({ duration: 50 }));
+        }
+        setShowSecurePassword(!showSecurePassword);
+    }
 
     const onLoginPressHandler = () => {
         // Handle login logic here
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-            router.navigate({
-                pathname: '/(drawer)/products'
-            })
-        }, 1000);
+        if (username && password) {
+            setIsLoading(true);
+            setTimeout(() => {
+                setIsLoading(false);
+                router.navigate({
+                    pathname: '/(drawer)/products'
+                })
+            }, 1000);
+        } else {
+            Alert.alert('Alert', 'Please enter both username and password')
+        }
     }
 
     return (
@@ -152,6 +186,8 @@ const Home = () => {
                 <View style={styles.userNameContainer}>
                     <TextInput
                         placeholder='Enter user name'
+                        value={username}
+                        onChangeText={(text: string) => setUsername(text)}
                         onFocus={onFocusUserNameHandler}
                         onBlur={onBlurUserNameHandler}
                         style={[styles.field]} />
@@ -170,9 +206,12 @@ const Home = () => {
                 <View style={styles.passwordContainer}>
                     <TextInput
                         placeholder='Enter password'
+                        value={password}
+                        onChangeText={(text: string) => setPassword(text)}
                         onFocus={onFocusPasswordHandler}
                         onBlur={onBlurPasswordHandler}
-                        secureTextEntry={true} style={[styles.field]} />
+                        secureTextEntry={!showSecurePassword}
+                        style={[styles.field]} />
 
                     <View style={{ position: 'absolute', right: 10, top: 15 }}>
 
@@ -182,7 +221,15 @@ const Home = () => {
                             </TouchableOpacity>
                         ) : (
                             <TouchableOpacity onPress={showPasswordHandler}>
-                                <Ionicons name='eye' size={20} color="gray" />
+                                <AnimatedIonicons
+                                    name="eye"
+                                    style={animatedIconStyle}
+                                    size={20} color="gray" />
+                                {/* <Ionicons name='eye' style={{
+                                    transform: [{
+                                        rotate: '180deg',
+                                    }]
+                                }} size={20} color="gray" /> */}
                             </TouchableOpacity>
                         )}
 

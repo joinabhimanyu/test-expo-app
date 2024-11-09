@@ -11,6 +11,7 @@ import baseStyles from '@/styles/baseStyles';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { MaskedTextInput } from 'react-native-mask-text';
+import { useNavigation } from 'expo-router';
 
 export default function Checkout() {
     const [billingInformation, setBillingInformation] = useState(new BillingInformation());
@@ -19,6 +20,31 @@ export default function Checkout() {
     const [orderPlaced, setOrderPlaced] = useState(false);
     const dispatch = useDispatch();
     const colorScheme = useColorScheme();
+    const navigation = useNavigation();
+
+    useEffect(() => {
+
+        navigation.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+            // Do your stuff here
+            Alert.alert(
+                'Changes might be lost',
+                'Really want to go back?',
+                [
+                    { text: "Cancel", style: 'cancel', onPress: () => { } },
+                    {
+                        text: "Yes",
+                        style: 'destructive',
+                        onPress: () => navigation.dispatch(e.data.action),
+                    },
+                ]
+            );
+        });
+
+        return () => {
+            navigation.removeListener('beforeRemove', () => false);
+        }
+    }, [])
 
     const onChangeBillingHandler = (value: string, fieldName: string) => {
         setBillingInformation({ ...billingInformation, [fieldName]: value })

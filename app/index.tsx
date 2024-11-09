@@ -166,8 +166,8 @@ const Home = () => {
             setIsLoading(true);
             setTimeout(() => {
                 setIsLoading(false);
-                router.navigate({
-                    pathname: '/products'
+                router.replace({
+                    pathname: '/products',
                 })
             }, 1000);
         } else {

@@ -224,7 +224,7 @@ export default function Cart() {
                                             },
                                             {
                                                 text: 'OK', onPress: () => {
-                                                    router.push({
+                                                    router.replace({
                                                         pathname: '/products/cart/checkout'
                                                     })
                                                 }

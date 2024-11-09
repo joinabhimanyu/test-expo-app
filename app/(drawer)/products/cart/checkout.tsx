@@ -11,7 +11,7 @@ import baseStyles from '@/styles/baseStyles';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { MaskedTextInput } from 'react-native-mask-text';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 
 export default function Checkout() {
     const [billingInformation, setBillingInformation] = useState(new BillingInformation());
@@ -136,9 +136,17 @@ export default function Checkout() {
                     <View style={{ paddingTop: 20, paddingBottom: 20 }}>
                         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Great! Order placed.</Text>
                     </View>
-                    <TouchableOpacity style={[baseStyles.primaryButton, {
-                        backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColor
-                    }]}>
+                    <TouchableOpacity
+                        style={[baseStyles.primaryButton, {
+                            backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColor
+                        }]}
+                        onPress={(e)=>{
+                            e.preventDefault();
+                            e.stopPropagation();
+                            router.replace({
+                                pathname: '/products'
+                            });
+                        }}>
                         <Text style={{ fontSize: 18, color: 'white' }}>Track Order</Text>
                     </TouchableOpacity>
                 </View>

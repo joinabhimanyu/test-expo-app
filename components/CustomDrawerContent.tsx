@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, useColorScheme } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, useColorScheme, Dimensions } from 'react-native'
 import React from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import baseStyles from '@/styles/baseStyles'
@@ -21,7 +21,12 @@ const CustomDrawerContent = (props: any) => {
                     <DrawerItemList {...props} />
                 </View>
                 <View style={styles.footer}>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 25 }}>
+                    <View style={{
+                        flex: 1,
+                        width: Dimensions.get('screen').width,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start',
+                    }}>
                         <TouchableOpacity
                             onPress={() => {
                                 router.navigate({
@@ -29,7 +34,11 @@ const CustomDrawerContent = (props: any) => {
                                 });
                             }}
                             style={[baseStyles.primaryButton, {
-                                backgroundColor: Colors[colorScheme ?? 'light'].text
+                                backgroundColor: Colors[colorScheme ?? 'light'].secondary,
+                                paddingTop: 8,
+                                paddingBottom: 8,
+                                width: 100,
+                                alignSelf: 'center',
                             }]}>
                             <Text style={{ color: 'white' }}>Log Out</Text>
                         </TouchableOpacity>
@@ -67,8 +76,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '600',
         padding: 4,
-        paddingRight: 12,
-        textAlign: 'right',
+        // paddingRight: 12,
+        // textAlign: 'right',
         position: 'absolute',
         bottom: 0,
     },

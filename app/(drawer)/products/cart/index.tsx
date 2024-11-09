@@ -208,12 +208,12 @@ export default function Cart() {
                                 }}>
                                 <Text style={{ color: 'white' }}>Clear</Text>
                             </TouchableOpacity>
-                            
+
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 0.5 }}>
                             <TouchableOpacity
                                 style={[baseStyles.primaryButton, {
-                                    backgroundColor: Colors[colorScheme ?? 'light'].primary,
+                                    backgroundColor: Colors[colorScheme ?? 'light'].secondary,
                                     width: 100,
                                     marginTop: 0,
                                     marginBottom: 0,

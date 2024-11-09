@@ -10,7 +10,8 @@ import {
     Image,
     TouchableHighlight,
     TextInput,
-    TouchableOpacity, Button
+    TouchableOpacity, Button,
+    TouchableOpacityBase
 } from "react-native";
 import baseStyles from "../../../styles/baseStyles";
 import {Stack, useRouter} from "expo-router";
@@ -100,8 +101,7 @@ export default function Index() {
                                     router.push({
                                         pathname: '/products/[id]',
                                         params: {id: item.id},
-                                    })
-                                    // router.navigate({pathname: '/products', params: {productId: item.id}});
+                                    });
                                 }}>
                                     <View style={styles.listItem}>
                                         {item.images && item.images.length ? (
@@ -124,7 +124,15 @@ export default function Index() {
                             )}
                             keyExtractor={(item, index) => item.description ?? ""}
                         />
-                        <Button title={`Load More`} onPress={()=>false}/>
+                        <TouchableOpacity style={[baseStyles.primaryButton, {
+                            backgroundColor: Colors[colorScheme?? 'light'].primary,
+                            alignSelf: 'center',
+                            marginBottom: 0,
+                            width: '100%'
+
+                         }]} onPress={() => false}>
+                            <Text style={{color:'white'}}>LOAD MORE</Text>
+                        </TouchableOpacity>
                     </View>
                 </>
             )
@@ -142,7 +150,12 @@ export default function Index() {
             ) : (
                 <>
                     {error ? (
-                        <View style={baseStyles.error}><Text>{error}</Text></View>
+                        <View style={baseStyles.error}><Text style={{
+                            color:'red', 
+                            fontWeight: '600',
+                            fontSize: 18,
+                            letterSpacing: 1.2
+                        }}>Oops! Error occurred while fetching data</Text></View>
                     ) : (
                         <>
                             {renderFlatList}

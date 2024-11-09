@@ -12,7 +12,6 @@ const baseStyles=StyleSheet.create({
         marginTop: 20,
         marginBottom: 20,
         alignSelf: "center",
-        color: "red",
         padding: 10,
         borderRadius: 8,
         justifyContent: "center",

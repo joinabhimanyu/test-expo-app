@@ -24,9 +24,9 @@ export default function DrawerLayout() {
                     headerShown: false,
                     headerTitleAlign: 'left',
                     headerTintColor: "black",
-                    headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground },
+                    headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].secondary },
 
-                    drawerActiveBackgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground,
+                    drawerActiveBackgroundColor: Colors[colorScheme ?? 'light'].secondary,
                     drawerActiveTintColor: Colors[colorScheme ?? 'light'].primary
                 }}>
                 <Drawer.Screen

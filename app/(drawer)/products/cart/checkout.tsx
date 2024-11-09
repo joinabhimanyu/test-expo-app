@@ -22,29 +22,53 @@ export default function Checkout() {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     addEventListener();
+    //     return () => {
+    //         removeEventListener();
+    //     }
+    // }, []);
 
+    useEffect(() => {
+        addEventListener();
+        return () => {
+            removeEventListener();
+        }
+    }, [orderPlaced]);
+
+    const addEventListener = () => {
+        // Add your event listener here
         navigation.addListener('beforeRemove', (e) => {
             e.preventDefault();
             // Do your stuff here
-            Alert.alert(
-                'Changes might be lost',
-                'Really want to go back?',
-                [
-                    { text: "Cancel", style: 'cancel', onPress: () => { } },
-                    {
-                        text: "Yes",
-                        style: 'destructive',
-                        onPress: () => navigation.dispatch(e.data.action),
-                    },
-                ]
-            );
-        });
+            if (orderPlaced) {
 
-        return () => {
-            navigation.removeListener('beforeRemove', () => false);
-        }
-    }, [])
+                navigation.dispatch(e.data.action);
+                removeEventListener();
+
+            } else {
+
+                Alert.alert(
+                    'Changes might be lost',
+                    'Really want to go back?',
+                    [
+                        { text: "Cancel", style: 'cancel', onPress: () => { } },
+                        {
+                            text: "Yes",
+                            style: 'destructive',
+                            onPress: () => navigation.dispatch(e.data.action),
+                        },
+                    ]
+                );
+
+            }
+            
+        });
+    }
+
+    const removeEventListener=()=>{
+        navigation.removeListener('beforeRemove', () => false);
+    }
 
     const onChangeBillingHandler = (value: string, fieldName: string) => {
         setBillingInformation({ ...billingInformation, [fieldName]: value })
@@ -138,7 +162,7 @@ export default function Checkout() {
                     </View>
                     <TouchableOpacity
                         style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColor
+                            backgroundColor: Colors[colorScheme ?? 'light'].secondary
                         }]}
                         onPress={(e)=>{
                             e.preventDefault();
@@ -400,7 +424,7 @@ export default function Checkout() {
                         <TouchableOpacity
                             style={{
                                 ...styles.placeOrder,
-                                backgroundColor: `${validateOrderButton ? 'orange' : 'gray'}`,
+                                backgroundColor: `${validateOrderButton ? Colors[colorScheme ?? 'light'].secondary : Colors[colorScheme ?? 'light'].icon}`,
                             }}
                             disabled={!validateOrderButton}
                             onPress={() => {

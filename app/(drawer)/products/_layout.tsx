@@ -65,7 +65,8 @@ export default function ProductsLayout() {
                                 }
                             }}
                             style={{ cursor: 'pointer', marginRight: 15 }}>
-                            <Ionicons name="cart" color={items && items.length ? Colors[colorScheme ?? 'light'].primary : Colors[colorScheme ?? 'light'].secondary} size={24} />
+                            <Ionicons name="cart" color={items && items.length ? Colors[colorScheme ?? 'light'].primary
+                                : Colors[colorScheme ?? 'light'].secondary} size={24} />
                         </TouchableHighlight>
                     ),
                 }}
@@ -92,7 +93,7 @@ export default function ProductsLayout() {
                     presentation: 'modal',
                     animation: 'slide_from_bottom'
                 }} />
-                <Stack.Screen name="cart/checkout" options={{ headerTitle: 'Checkout', headerBackVisible: false, headerRight:()=>false }} />
+                <Stack.Screen name="cart/checkout" options={{ headerTitle: 'Checkout', headerBackVisible: false, headerRight: () => false }} />
             </Stack>
         </>
     );

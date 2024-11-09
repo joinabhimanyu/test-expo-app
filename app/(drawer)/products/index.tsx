@@ -125,7 +125,7 @@ export default function Index() {
                             keyExtractor={(item, index) => item.description ?? ""}
                         />
                         <TouchableOpacity style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme?? 'light'].primary,
+                            backgroundColor: Colors[colorScheme?? 'light'].secondary,
                             alignSelf: 'center',
                             marginBottom: 0,
                             width: '100%'

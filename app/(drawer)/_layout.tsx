@@ -43,7 +43,7 @@ export default function DrawerLayout() {
                                 onPress={() => {
                                     if (pathname !== '/products/cart') {
                                         router.push({
-                                            pathname: "/(drawer)/products/cart",
+                                            pathname: "/products/cart",
                                             params: {}
                                         })
                                     }

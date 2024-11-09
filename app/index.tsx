@@ -167,7 +167,7 @@ const Home = () => {
             setTimeout(() => {
                 setIsLoading(false);
                 router.navigate({
-                    pathname: '/(drawer)/products'
+                    pathname: '/products'
                 })
             }, 1000);
         } else {

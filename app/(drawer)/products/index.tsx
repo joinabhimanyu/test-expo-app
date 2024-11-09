@@ -98,7 +98,7 @@ export default function Index() {
                             renderItem={({item}) => (
                                 <TouchableOpacity onPress={() => {
                                     router.push({
-                                        pathname: '/(drawer)/products/[id]',
+                                        pathname: '/products/[id]',
                                         params: {id: item.id},
                                     })
                                     // router.navigate({pathname: '/products', params: {productId: item.id}});

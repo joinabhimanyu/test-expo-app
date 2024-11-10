@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, ScrollView } from 'react-native'
-import React, { useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import React, { useEffect, useState } from 'react'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import baseStyles from '@/styles/baseStyles'
 import { useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
+import Animated, { useAnimatedProps, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
+import createAnimatedComponent = Animated.createAnimatedComponent;
 
 const Register = () => {
 
     const router = useRouter();
+    const AnimatedIcon = createAnimatedComponent(Ionicons);
     const { width } = Dimensions.get('screen');
     const colorScheme = useColorScheme();
     const [firstname, setfirstname] = React.useState('');
@@ -25,7 +28,44 @@ const Register = () => {
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+
     const [page, setPage] = useState(1);
+
+    const color1 = useSharedValue('white');
+    const color2 = useSharedValue('white');
+    const color3 = useSharedValue('white');
+
+    useEffect(() => {
+        if (page == 1) {
+
+            color1.value = withTiming(Colors[colorScheme ?? 'light'].secondary, withSpring({ duration: 50 }));
+            color2.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+            color3.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+
+        } else if (page == 2) {
+
+            color1.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+            color2.value = withTiming(Colors[colorScheme ?? 'light'].secondary, withSpring({ duration: 50 }));
+            color3.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+        } else if (page == 3) {
+
+            color1.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+            color2.value = withTiming(Colors[colorScheme ?? 'light'].icon, withSpring({ duration: 50 }));
+            color3.value = withTiming(Colors[colorScheme ?? 'light'].secondary, withSpring({ duration: 50 }));
+        }
+    }, [page]);
+
+    const animatedProp1 = useAnimatedProps(() => ({
+        color: color1.value,
+    }));
+
+    const animatedProp2 = useAnimatedProps(() => ({
+        color: color2.value,
+    }));
+
+    const animatedProp3 = useAnimatedProps(() => ({
+        color: color3.value,
+    }));
 
     const onPressRegisterHandler = () => {
         setLoading(true);
@@ -95,14 +135,22 @@ const Register = () => {
                             setPage(page - 1)
                         }
                     }}>
-                        <Ionicons name="caret-back" size={24} color={page==1?Colors[colorScheme ?? 'light'].icon: Colors[colorScheme ?? 'light'].secondary} />
+                        <Ionicons name="caret-back" size={24} color={page == 1 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
                     </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: 200 }}>
+                        <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp1}
+                            size={page==1?18:12} />
+                        <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp2}
+                            size={page==2?18:12} />
+                        <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp3}
+                            size={page==3?18:12} />
+                    </View>
                     <TouchableOpacity style={styles.paginationControl} onPress={() => {
                         if (page < 3) {
                             setPage(page + 1)
                         }
                     }}>
-                        <Ionicons name="caret-forward" size={24} color={page==3?Colors[colorScheme ?? 'light'].icon: Colors[colorScheme ?? 'light'].secondary} />
+                        <Ionicons name="caret-forward" size={24} color={page == 3 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
                     </TouchableOpacity>
                 </View>
 

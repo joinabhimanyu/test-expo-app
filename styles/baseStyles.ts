@@ -39,7 +39,8 @@ const baseStyles=StyleSheet.create({
         elevation: 5,
     },
     socialButton: {
-      marginRight: 20
+      marginRight: 20,
+      borderRadius: 30
     }
 });
 

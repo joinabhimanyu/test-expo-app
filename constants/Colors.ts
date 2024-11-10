@@ -9,6 +9,9 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
+    facebookIconBackground: '#385185',
+    googleIconBackground: '#DD4B39',
+    twitterIconBackground: '#00A6ED',
     text: '#11181C',
     shadowColor: '#c4c4c4',
     fieldBorderColor: '#ccc',
@@ -29,6 +32,9 @@ export const Colors = {
     imageBackgroundColor:'#fff'
   },
   dark: {
+    facebookIconBackground: '#385185',
+    googleIconBackground: '#DD4B39',
+    twitterIconBackground: '#00A6ED',
     text: '#ECEDEE',
     shadowColor: '#c4c4c4',
     fieldBorderColor: '#ccc',

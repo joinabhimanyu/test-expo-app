@@ -123,6 +123,16 @@ const Home = () => {
             textShadowColor: Colors[colorScheme ?? 'light'].icon,
             textShadowOffset: { width: 2, height: 2 },
             textShadowRadius: 5
+        },
+        socialMediaContainer: {
+            flexDirection: 'row',
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: 20,
+            marginBottom: 20,
+            paddingHorizontal: 20,
         }
     });
 
@@ -159,6 +169,8 @@ const Home = () => {
         }
         setShowSecurePassword(!showSecurePassword);
     }
+
+    const onSignUpPressHandler=()=>false;
 
     const onLoginPressHandler = () => {
         // Handle login logic here
@@ -224,12 +236,7 @@ const Home = () => {
                                 <AnimatedIonicons
                                     name="eye"
                                     style={animatedIconStyle}
-                                    size={20} color={Colors[colorScheme??'light'].icon} />
-                                {/* <Ionicons name='eye' style={{
-                                    transform: [{
-                                        rotate: '180deg',
-                                    }]
-                                }} size={20} color={Colors[colorScheme??'light'].icon} /> */}
+                                    size={20} color={Colors[colorScheme ?? 'light'].icon} />
                             </TouchableOpacity>
                         )}
 
@@ -243,6 +250,24 @@ const Home = () => {
                     <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
                 </Link>
 
+            </View>
+
+            <View style={{ position: 'absolute', bottom: 20, left: 20 }}>
+                <TouchableOpacity onPress={onSignUpPressHandler}>
+                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon }}>Don't have an account? Sign up.</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.socialMediaContainer}>
+                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].facebookIconBackground }]}>
+                    <Ionicons name='logo-facebook' size={20} color='white' />
+                </TouchableOpacity>
+                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].googleIconBackground }]}>
+                    <Ionicons name='logo-google' size={20} color='white' />
+                </TouchableOpacity>
+                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].twitterIconBackground }]}>
+                    <Ionicons name='logo-twitter' size={20} color='white' />
+                </TouchableOpacity>
             </View>
 
             <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {

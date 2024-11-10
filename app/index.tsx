@@ -26,10 +26,15 @@ const Home = () => {
     const marginTop = useSharedValue(0);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [otp, setOtp] = useState('');
+
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const AnimatedIonicons = createAnimatedComponent(Ionicons);
     const rotationAnimation = useSharedValue(0);
+    const [loginWithOTP, setLoginWithOTP] = useState(false);
+    const [otpRequested, setOTPRequested] = useState(false);
 
     useEffect(() => {
 
@@ -138,7 +143,16 @@ const Home = () => {
 
     const [showCloseIconUsername, setShowCloseIconUsername] = useState(false);
     const [showCloseIconPassword, setShowCloseIconPassword] = useState(false);
+    const [showCloseIconPhone, setShowCloseIconPhone] = useState(false);
     const [showSecurePassword, setShowSecurePassword] = useState(false);
+
+    const onFocusPhoneHandler = () => {
+        setShowCloseIconPhone(true)
+    }
+
+    const onBlurPhoneHandler = () => {
+        setShowCloseIconPhone(false)
+    }
 
     const onFocusUserNameHandler = () => {
         setShowCloseIconUsername(true)
@@ -156,9 +170,11 @@ const Home = () => {
         setShowCloseIconPassword(false)
     }
 
-    const clearUserNameHandler = () => setUsername('')
+    const clearUserNameHandler = () => setUsername('');
 
-    const clearPasswordHandler = () => setPassword('')
+    const clearPasswordHandler = () => setPassword('');
+
+    const clearPhoneHandler = () => setPhone('');
 
     const showPasswordHandler = () => {
         if (showSecurePassword) {
@@ -170,7 +186,7 @@ const Home = () => {
         setShowSecurePassword(!showSecurePassword);
     }
 
-    const onSignUpPressHandler=()=>false;
+    const onSignUpPressHandler = () => false;
 
     const onLoginPressHandler = () => {
         // Handle login logic here
@@ -187,6 +203,21 @@ const Home = () => {
         }
     }
 
+    const onLoginWithOTPPressHandler = () => {
+        // Handle login logic here
+        if (phone && otp) {
+            setIsLoading(true);
+            setTimeout(() => {
+                setIsLoading(false);
+                router.replace({
+                    pathname: '/products',
+                })
+            }, 1000);
+        } else {
+            Alert.alert('Alert', 'Please enter both phone and otp')
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Animated.View style={[containerAnimatedStyle, styles.logoContainer]}>
@@ -195,60 +226,102 @@ const Home = () => {
             </Animated.View>
             <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
 
-                <View style={styles.userNameContainer}>
-                    <TextInput
-                        placeholder='Enter user name'
-                        value={username}
-                        onChangeText={(text: string) => setUsername(text)}
-                        onFocus={onFocusUserNameHandler}
-                        onBlur={onBlurUserNameHandler}
-                        style={[styles.field]} />
+                {!loginWithOTP ? (
 
-                    <View style={{ position: 'absolute', right: 10, top: 15 }}>
+                    <>
+                        <View style={styles.userNameContainer}>
+                            <TextInput
+                                placeholder='Enter user name'
+                                value={username}
+                                onChangeText={(text: string) => setUsername(text)}
+                                onFocus={onFocusUserNameHandler}
+                                onBlur={onBlurUserNameHandler}
+                                style={[styles.field]} />
 
-                        {showCloseIconUsername ? (
-                            <TouchableOpacity onPress={clearUserNameHandler}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        ) : null}
+                            <View style={{ position: 'absolute', right: 10, top: 15 }}>
 
-                    </View>
-                </View>
+                                {showCloseIconUsername ? (
+                                    <TouchableOpacity onPress={clearUserNameHandler}>
+                                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                    </TouchableOpacity>
+                                ) : null}
 
-                <View style={styles.passwordContainer}>
-                    <TextInput
-                        placeholder='Enter password'
-                        value={password}
-                        onChangeText={(text: string) => setPassword(text)}
-                        onFocus={onFocusPasswordHandler}
-                        onBlur={onBlurPasswordHandler}
-                        secureTextEntry={!showSecurePassword}
-                        style={[styles.field]} />
+                            </View>
+                        </View>
 
-                    <View style={{ position: 'absolute', right: 10, top: 15 }}>
+                        <View style={styles.passwordContainer}>
+                            <TextInput
+                                placeholder='Enter password'
+                                value={password}
+                                onChangeText={(text: string) => setPassword(text)}
+                                onFocus={onFocusPasswordHandler}
+                                onBlur={onBlurPasswordHandler}
+                                secureTextEntry={!showSecurePassword}
+                                style={[styles.field]} />
 
-                        {showCloseIconPassword ? (
-                            <TouchableOpacity onPress={clearPasswordHandler}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
+                            <View style={{ position: 'absolute', right: 10, top: 15 }}>
+
+                                {showCloseIconPassword ? (
+                                    <TouchableOpacity onPress={clearPasswordHandler}>
+                                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity onPress={showPasswordHandler}>
+                                        <AnimatedIonicons
+                                            name="eye"
+                                            style={animatedIconStyle}
+                                            size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                    </TouchableOpacity>
+                                )}
+
+                            </View>
+                        </View>
+
+                        <Link href=".." style={{ alignSelf: 'flex-end', marginBottom: 30 }} onPress={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}>
+                            <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
+                        </Link>
+                    </>
+
+                ) : (
+                    <>
+                        {!otpRequested ? (
+                            <View style={styles.userNameContainer}>
+                                <TextInput
+                                    placeholder='Enter phone number'
+                                    keyboardType='phone-pad'
+                                    maxLength={10}
+                                    value={phone}
+                                    onChangeText={(text: string) => setPhone(text)}
+                                    onFocus={onFocusPhoneHandler}
+                                    onBlur={onBlurPhoneHandler}
+                                    style={[styles.field]} />
+
+                                <View style={{ position: 'absolute', right: 10, top: 15 }}>
+
+                                    {showCloseIconPhone ? (
+                                        <TouchableOpacity onPress={clearPhoneHandler}>
+                                            <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                        </TouchableOpacity>
+                                    ) : null}
+
+                                </View>
+                            </View>
                         ) : (
-                            <TouchableOpacity onPress={showPasswordHandler}>
-                                <AnimatedIonicons
-                                    name="eye"
-                                    style={animatedIconStyle}
-                                    size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
+                            <View style={styles.userNameContainer}>
+                                <TextInput
+                                    placeholder='Enter OTP'
+                                    keyboardType='numeric'
+                                    maxLength={6}
+                                    value={otp}
+                                    onChangeText={(text: string) => setOtp(text)}
+                                    style={[styles.field]} />
+                            </View>
                         )}
-
-                    </View>
-                </View>
-
-                <Link href=".." style={{ alignSelf: 'flex-end', marginBottom: 30 }} onPress={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }}>
-                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
-                </Link>
+                    </>
+                )}
 
             </View>
 
@@ -270,15 +343,79 @@ const Home = () => {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {
-                backgroundColor: Colors[colorScheme ?? 'light'].text,
-            }]}>
-                {isLoading ? (
-                    <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
-                ) : (
-                    <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login</Text>
-                )}
-            </TouchableOpacity>
+            {!loginWithOTP ? (
+
+                <>
+                    <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {
+                        backgroundColor: Colors[colorScheme ?? 'light'].text,
+                    }]}>
+                        {isLoading ? (
+                            <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                        ) : (
+                            <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login</Text>
+                        )}
+                    </TouchableOpacity>
+
+                    <Link href=".." onPress={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setLoginWithOTP(true);
+                        setOTPRequested(false);
+                        setPhone('');
+                        setOtp('');
+                        // router.push({
+                        //     pathname: '/verify-otp',
+                        // });
+                    }}>
+                        <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: '400', marginTop: 10 }}>Login with OTP</Text>
+                    </Link>
+                </>
+
+            ) : (
+                <>
+                    {!otpRequested ? (
+                        <TouchableOpacity onPress={() => {
+                            setOTPRequested(true);
+                            setOtp('');
+
+                        }} style={[baseStyles.primaryButton, {
+                            backgroundColor: Colors[colorScheme ?? 'light'].text,
+                        }]}>
+                            {isLoading ? (
+                                <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                            ) : (
+                                <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Request OTP</Text>
+                            )}
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity onPress={onLoginWithOTPPressHandler} style={[baseStyles.primaryButton, {
+                            backgroundColor: Colors[colorScheme ?? 'light'].text,
+                        }]}>
+                            {isLoading ? (
+                                <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                            ) : (
+                                <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login with OTP</Text>
+                            )}
+                        </TouchableOpacity>
+                    )}
+
+
+                    <Link href=".." onPress={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setLoginWithOTP(false);
+                        setOTPRequested(false);
+                        setPhone('');
+                        setOtp('');
+                        // router.push({
+                        //     pathname: '/verify-otp',
+                        // });
+                    }}>
+                        <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: '400', marginTop: 10 }}>Login with credentials</Text>
+                    </Link>
+                </>
+            )}
+
         </View>
     )
 }

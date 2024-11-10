@@ -92,7 +92,7 @@ const Home = () => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#F5F5F5'
+            backgroundColor: Colors[colorScheme ?? 'light'].background
         },
         userNameContainer: {
             marginBottom: 20
@@ -102,10 +102,10 @@ const Home = () => {
         },
         field: {
             borderWidth: 1,
-            borderColor: '#ccc',
+            borderColor: Colors[colorScheme ?? 'light'].fieldBorderColor,
             padding: 10,
             borderRadius: 10,
-            backgroundColor: '#fff',
+            backgroundColor: Colors[colorScheme ?? 'light'].imageBorderColor,
             fontSize: 16,
             height: 50,
             width: width * 0.8,
@@ -119,8 +119,8 @@ const Home = () => {
             letterSpacing: 1.5,
             fontFamily: 'HelveticaLight',
             fontWeight: 400,
-            color: 'black',
-            textShadowColor: 'gray',
+            color: Colors[colorScheme ?? 'light'].secondary,
+            textShadowColor: Colors[colorScheme ?? 'light'].icon,
             textShadowOffset: { width: 2, height: 2 },
             textShadowRadius: 5
         }
@@ -196,7 +196,7 @@ const Home = () => {
 
                         {showCloseIconUsername ? (
                             <TouchableOpacity onPress={clearUserNameHandler}>
-                                <Ionicons name='close-circle' size={20} color="gray" />
+                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
                             </TouchableOpacity>
                         ) : null}
 
@@ -217,19 +217,19 @@ const Home = () => {
 
                         {showCloseIconPassword ? (
                             <TouchableOpacity onPress={clearPasswordHandler}>
-                                <Ionicons name='close-circle' size={20} color="gray" />
+                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
                             </TouchableOpacity>
                         ) : (
                             <TouchableOpacity onPress={showPasswordHandler}>
                                 <AnimatedIonicons
                                     name="eye"
                                     style={animatedIconStyle}
-                                    size={20} color="gray" />
+                                    size={20} color={Colors[colorScheme??'light'].icon} />
                                 {/* <Ionicons name='eye' style={{
                                     transform: [{
                                         rotate: '180deg',
                                     }]
-                                }} size={20} color="gray" /> */}
+                                }} size={20} color={Colors[colorScheme??'light'].icon} /> */}
                             </TouchableOpacity>
                         )}
 
@@ -240,7 +240,7 @@ const Home = () => {
                     e.preventDefault();
                     e.stopPropagation();
                 }}>
-                    <Text style={{ color: 'gray', fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
+                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
                 </Link>
 
             </View>
@@ -251,7 +251,7 @@ const Home = () => {
                 {isLoading ? (
                     <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
                 ) : (
-                    <Text style={{ color: 'white' }}>Login</Text>
+                    <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login</Text>
                 )}
             </TouchableOpacity>
         </View>

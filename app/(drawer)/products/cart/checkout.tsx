@@ -22,12 +22,49 @@ export default function Checkout() {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
 
-    // useEffect(() => {
-    //     addEventListener();
-    //     return () => {
-    //         removeEventListener();
-    //     }
-    // }, []);
+    const styles = StyleSheet.create({
+        fieldContainer: {
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            paddingTop: 10,
+            paddingLeft: 10,
+            paddingRight: 10
+        },
+        fieldLabel: { fontSize: 14, fontWeight: 'bold' },
+        placeOrderContainer: {
+            paddingTop: 10,
+            paddingBottom: 10,
+            paddingLeft: 10,
+            paddingRight: 10,
+            justifyContent: 'flex-end',
+            alignItems: 'center'
+        },
+        placeOrder: {
+            padding: 10,
+            borderRadius: 20,
+            width: 150,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        paymentOption: {
+            padding: 10,
+            borderRadius: 10,
+            backgroundColor: Colors[colorScheme ?? 'light'].listItemBackground,
+            width: 80,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        paymentOptionsContainer: {
+            paddingTop: 20,
+            paddingBottom: 10,
+            paddingLeft: 20,
+            paddingRight: 10,
+            justifyContent: 'center',
+            alignItems: 'flex-start'
+        },
+        paymentOptionLabel: { fontSize: 14, fontWeight: "bold" }
+    });
 
     useEffect(() => {
         addEventListener();
@@ -62,11 +99,11 @@ export default function Checkout() {
                 );
 
             }
-            
+
         });
     }
 
-    const removeEventListener=()=>{
+    const removeEventListener = () => {
         navigation.removeListener('beforeRemove', () => false);
     }
 
@@ -164,7 +201,7 @@ export default function Checkout() {
                         style={[baseStyles.primaryButton, {
                             backgroundColor: Colors[colorScheme ?? 'light'].secondary
                         }]}
-                        onPress={(e)=>{
+                        onPress={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             router.replace({
@@ -450,47 +487,3 @@ export default function Checkout() {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    fieldContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-    fieldLabel: { fontSize: 14, fontWeight: 'bold' },
-    placeOrderContainer: {
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        justifyContent: 'flex-end',
-        alignItems: 'center'
-    },
-    placeOrder: {
-        padding: 10,
-        borderRadius: 20,
-        width: 150,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    paymentOption: {
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: '#f2f2f2',
-        width: 80,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    paymentOptionsContainer: {
-        paddingTop: 20,
-        paddingBottom: 10,
-        paddingLeft: 20,
-        paddingRight: 10,
-        justifyContent: 'center',
-        alignItems: 'flex-start'
-    },
-    paymentOptionLabel: { fontSize: 14, fontWeight: "bold" }
-})

@@ -10,7 +10,10 @@ const tintColorDark = '#fff';
 export const Colors = {
   light: {
     text: '#11181C',
-    background: '#fff',
+    shadowColor: '#c4c4c4',
+    fieldBorderColor: '#ccc',
+    background: '#F5F5F5',
+    listItemBackground: '#f2f2f2',
     tint: tintColorLight,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
@@ -27,7 +30,10 @@ export const Colors = {
   },
   dark: {
     text: '#ECEDEE',
+    shadowColor: '#c4c4c4',
+    fieldBorderColor: '#ccc',
     background: '#151718',
+    listItemBackground: '#f2f2f2',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',

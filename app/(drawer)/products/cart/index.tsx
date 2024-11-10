@@ -46,22 +46,6 @@ export default function Cart() {
         }
     }
 
-    const calculateTotalCost = useMemo(() => {
-        let allFinalPrice = 0.0;
-        if (items && items.length) {
-            for (const item of items) {
-                const { price, discountPercentage, purchasedQuantity } = item;
-                let finalPrice = price;
-                if (discountPercentage) {
-                    const discount = (discountPercentage / 100) * price;
-                    finalPrice = (price - discount) * purchasedQuantity;
-                }
-                allFinalPrice += finalPrice;
-            }
-        }
-        return allFinalPrice.toFixed(2);
-    }, [items])
-
     return (
         <>
             {items && items.length ? (
@@ -174,7 +158,7 @@ export default function Cart() {
                         paddingBottom: 20,
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        shadowColor: 'gray',
+                        shadowColor: Colors[colorScheme??'light'].icon,
                         shadowOffset: { width: 0, height: 1 },
                         shadowOpacity: 1,
                         shadowRadius: 1,
@@ -187,7 +171,7 @@ export default function Cart() {
                             }}><Text>Dismiss</Text></Link> : null} */}
                             <TouchableOpacity
                                 style={[baseStyles.primaryButton, {
-                                    backgroundColor: Colors[colorScheme ?? 'light'].primaryButtonColorDisabled,
+                                    backgroundColor: Colors[colorScheme ?? 'light'].icon,
                                     width: 100,
                                     marginTop: 0,
                                     marginBottom: 0,

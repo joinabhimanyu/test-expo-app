@@ -19,7 +19,7 @@ export default function CartReducer(state = initialState, action: {
                 ...state,
                 items: JSON.parse(JSON.stringify(state.items.concat({
                     ...action.payload,
-                    purchasedQuantity: 0
+                    purchasedQuantity: 1
                 }))),
             };
         case ActionTypes.SET_CART:

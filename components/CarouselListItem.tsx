@@ -8,7 +8,7 @@ import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } f
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 const CarouselListItem = ({ item, index, scrollX, title, description }:
-    { item: string, index: number, scrollX: SharedValue<number>, title: string|undefined, description: string|undefined }) => {
+    { item: string, index: number, scrollX: SharedValue<number>, title: string | undefined, description: string | undefined }) => {
 
     const { width } = Dimensions.get('screen');
     const colorScheme = useColorScheme();
@@ -71,7 +71,7 @@ const CarouselListItem = ({ item, index, scrollX, title, description }:
                 }}
             >
                 <View style={{ alignItems: 'flex-end' }}>
-                    <TouchableOpacity style={{ backgroundColor: 'gray', borderRadius: 30, padding: 5 }}>
+                    <TouchableOpacity style={{ backgroundColor: Colors[colorScheme ?? 'light'].icon, borderRadius: 30, padding: 5 }}>
                         <Ionicons name="heart-outline" size={24} color="white" />
                     </TouchableOpacity>
                 </View>

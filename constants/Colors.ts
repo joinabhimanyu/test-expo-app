@@ -29,7 +29,9 @@ export const Colors = {
     primaryButtonColor: '#eb983a',
     primaryButtonColorDisabled: '#949494',
     imageBorderColor:'#fff',
-    imageBackgroundColor:'#fff'
+    imageBackgroundColor:'#fff',
+    paginationControlBorderColor: '#1b1919',
+    paginationControlBackgroundColor: '#e9f0f1',
   },
   dark: {
     facebookIconBackground: '#385185',
@@ -52,6 +54,8 @@ export const Colors = {
     primaryButtonColor: '#eb983a',
     primaryButtonColorDisabled: '#949494',
     imageBorderColor:'#fff',
-    imageBackgroundColor:'#fff'
+    imageBackgroundColor:'#fff',
+    paginationControlBorderColor: '#fff',
+    paginationControlBackgroundColor: '#3893bd',
   },
 };

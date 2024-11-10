@@ -186,7 +186,12 @@ const Home = () => {
         setShowSecurePassword(!showSecurePassword);
     }
 
-    const onSignUpPressHandler = () => false;
+    const onSignUpPressHandler = () => {
+        // redirect to register page
+        router.navigate({
+            pathname: '/register',
+        })
+    };
 
     const onLoginPressHandler = () => {
         // Handle login logic here

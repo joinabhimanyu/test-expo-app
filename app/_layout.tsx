@@ -10,6 +10,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SafeAreaView } from "react-native";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
+import { Colors } from '@/constants/Colors';
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();
@@ -51,6 +52,13 @@ export default function RootLayout() {
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Stack initialRouteName='index'>
                         <Stack.Screen name="index" options={{ headerShown: false }} />
+                        <Stack.Screen name="register" options={{ 
+                            headerShown: true,
+                            headerTitle: 'Register',
+                            headerTitleAlign: 'left',
+                            headerTintColor: Colors[colorScheme ?? 'light'].secondary,
+                            headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground },
+                         }} />
                         <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
                         <Stack.Screen name='+not-found' />
                     </Stack>

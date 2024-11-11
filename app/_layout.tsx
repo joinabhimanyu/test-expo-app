@@ -7,7 +7,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { SafeAreaView } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
 import { Colors } from '@/constants/Colors';
@@ -52,13 +52,24 @@ export default function RootLayout() {
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Stack initialRouteName='index'>
                         <Stack.Screen name="index" options={{ headerShown: false }} />
-                        <Stack.Screen name="register" options={{ 
+                        <Stack.Screen name="register" options={{
                             headerShown: true,
                             headerTitle: 'Register',
                             headerTitleAlign: 'left',
                             headerTintColor: Colors[colorScheme ?? 'light'].secondary,
                             headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground },
-                         }} />
+                            headerRight: () => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        // if (pathname !== '/products/cart') {
+                                        //     router.push({
+                                        //         pathname: "/products/cart",
+                                        //         params: {}
+                                        //     })
+                                        // }
+                                    }}><Text style={{color: Colors[colorScheme??'light'].primary}}>Clear</Text></TouchableOpacity>
+                            )
+                        }} />
                         <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
                         <Stack.Screen name='+not-found' />
                     </Stack>

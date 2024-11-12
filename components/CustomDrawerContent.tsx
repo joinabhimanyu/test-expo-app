@@ -79,6 +79,6 @@ const styles = StyleSheet.create({
         // paddingRight: 12,
         // textAlign: 'right',
         position: 'absolute',
-        bottom: 0,
+        bottom: 5,
     },
 });

@@ -16,10 +16,11 @@ import {
 import baseStyles from "../../../styles/baseStyles";
 import { Stack, useRouter } from "expo-router";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemsToCart } from "@/redux/cart/actions";
 import { Colors } from "@/constants/Colors";
+import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 
 export default function Index() {
 
@@ -86,6 +87,22 @@ export default function Index() {
         )
     };
 
+    const renderRightAction = (item: Product) => {
+        let disabled = false;
+        if (items.find(x => x.id == item.id)) {
+            disabled = true;
+        }
+        return (
+            <TouchableOpacity style={{ backgroundColor: 'transparent', padding: 10 }}
+                disabled={disabled}
+                onPress={() => {
+                    dispatch(addItemsToCart(item));
+                }}>
+                <Ionicons name="heart" size={20} color={disabled ? Colors[colorScheme ?? 'light'].googleIconBackground : Colors[colorScheme ?? 'light'].stackHeaderBackground}></Ionicons>
+            </TouchableOpacity>
+        )
+    }
+
 
     const renderFlatList = useMemo(() => {
         if (data && data.products && data.products.length) {
@@ -96,6 +113,7 @@ export default function Index() {
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 style={{
+                                    marginTop: 5,
                                     alignSelf: 'flex-start',
                                     flex: 1,
                                     paddingBottom: 20,
@@ -113,11 +131,13 @@ export default function Index() {
                                 onChangeText={(text) => {
                                     console.log(text);
                                 }} />
-                            <TouchableOpacity style={{ position: 'absolute', right: 10, top: 15 }} onPress={() => {
-                                return false;
-                            }}>
-                                <FontAwesome name="search" size={14} />
-                            </TouchableOpacity>
+                            <View style={{ position: 'absolute', right: 10, top: 0, justifyContent:'center', flex:1, height: 40}}>
+                                <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {
+                                    return false;
+                                }}>
+                                    <FontAwesome name="search" size={14} />
+                                </TouchableOpacity>
+                            </View>
 
                         </View>
 
@@ -130,23 +150,31 @@ export default function Index() {
                                         params: { id: item.id },
                                     });
                                 }}>
-                                    <View style={styles.listItem}>
-                                        {item.images && item.images.length ? (
-                                            <>
-                                                <Image width={80} height={80}
-                                                    source={{ uri: item.images[0] }} />
-                                                <View style={{ flex: 0.95, paddingLeft: 15, paddingTop: 10 }}>
-                                                    <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
-                                                    <Text>{item.description}</Text>
-                                                    <Text style={{ marginTop: 10 }}>Price: {item.price}</Text>
-                                                    <Text>Shipping: {item.shippingInformation}</Text>
-                                                    <Text>Availability: {item.availabilityStatus}</Text>
-                                                    {renderAddToCartButton(item)}
-                                                </View>
+                                    <GestureHandlerRootView>
+                                        <Swipeable overshootRight={false} renderRightActions={() => (
+                                            <View style={{ width: 40, marginRight: 5, justifyContent: 'center', alignItems: 'center' }}>
+                                                {renderRightAction(item)}
+                                            </View>
+                                        )}>
+                                            <View style={styles.listItem}>
+                                                {item.images && item.images.length ? (
+                                                    <>
+                                                        <Image width={80} height={80}
+                                                            source={{ uri: item.images[0] }} />
+                                                        <View style={{ flex: 0.95, paddingLeft: 15, paddingTop: 10 }}>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
+                                                            <Text>{item.description}</Text>
+                                                            <Text style={{ marginTop: 10 }}>Price: {item.price}</Text>
+                                                            <Text>Shipping: {item.shippingInformation}</Text>
+                                                            <Text>Availability: {item.availabilityStatus}</Text>
+                                                            {renderAddToCartButton(item)}
+                                                        </View>
 
-                                            </>
-                                        ) : null}
-                                    </View>
+                                                    </>
+                                                ) : null}
+                                            </View>
+                                        </Swipeable>
+                                    </GestureHandlerRootView>
                                 </TouchableOpacity>
                             )}
                             keyExtractor={(item, index) => item.description ?? ""}

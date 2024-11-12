@@ -29,7 +29,8 @@ export default function Checkout() {
             alignItems: 'center',
             paddingTop: 10,
             paddingLeft: 10,
-            paddingRight: 10
+            paddingRight: 10,
+            marginBottom: 10
         },
         fieldLabel: { fontSize: 14, fontWeight: 'bold' },
         placeOrderContainer: {
@@ -37,6 +38,7 @@ export default function Checkout() {
             paddingBottom: 10,
             paddingLeft: 10,
             paddingRight: 10,
+            marginBottom: 10,
             justifyContent: 'flex-end',
             alignItems: 'center'
         },

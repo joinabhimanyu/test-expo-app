@@ -63,8 +63,7 @@ export default function ProductsLayout() {
                                         params: {}
                                     })
                                 }
-                            }}
-                            style={{ cursor: 'pointer', marginRight: 15 }}>
+                            }}>
                             <Ionicons name="cart" color={items && items.length ? Colors[colorScheme ?? 'light'].primary
                                 : Colors[colorScheme ?? 'light'].secondary} size={24} />
                         </TouchableHighlight>

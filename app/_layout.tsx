@@ -58,17 +58,6 @@ export default function RootLayout() {
                             headerTitleAlign: 'left',
                             headerTintColor: Colors[colorScheme ?? 'light'].secondary,
                             headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].stackHeaderBackground },
-                            headerRight: () => (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        // if (pathname !== '/products/cart') {
-                                        //     router.push({
-                                        //         pathname: "/products/cart",
-                                        //         params: {}
-                                        //     })
-                                        // }
-                                    }}><Text style={{color: Colors[colorScheme??'light'].primary}}>Clear</Text></TouchableOpacity>
-                            )
                         }} />
                         <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
                         <Stack.Screen name='+not-found' />

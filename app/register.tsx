@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import baseStyles from '@/styles/baseStyles'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
 import Animated, { useAnimatedProps, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import createAnimatedComponent = Animated.createAnimatedComponent;
@@ -13,7 +13,7 @@ const Register = () => {
 
     const router = useRouter();
     const AnimatedIcon = createAnimatedComponent(Ionicons);
-    const { width } = Dimensions.get('screen');
+    const { width, height } = Dimensions.get('screen');
     const colorScheme = useColorScheme();
 
     // create state variables for new user registration
@@ -21,8 +21,11 @@ const Register = () => {
     const [lastname, setlastname] = React.useState('');
     const [username, setusername] = useState('');
     const [email, setemail] = React.useState('');
+
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [passwordHint, setPasswordHint] = React.useState('');
+
     const [phone, setphone] = React.useState('');
     const [gender, setGender] = React.useState('');
     const [dob, setdob] = React.useState('');
@@ -51,6 +54,7 @@ const Register = () => {
     useEffect(() => {
         if (firstname && lastname && username && email
             && password && confirmPassword
+            && passwordHint
             && phone
             && gender
             && dob
@@ -62,8 +66,8 @@ const Register = () => {
             setIsValid(false);
         }
     }, [
-        firstname, lastname, username, email, password, confirmPassword, phone, gender, dob, address
-    ])
+        firstname, lastname, username, email, password, confirmPassword, passwordHint, phone, gender, dob, address
+    ]);
 
     useEffect(() => {
         if (page == 1) {
@@ -131,6 +135,8 @@ const Register = () => {
             padding: 20,
             backgroundColor: 'white'
         },
+        sectionContainer: { width: width*0.8, gap: 20, height: height*0.5 },
+        clearControl: { position: 'absolute', right: 0, top: 22 },
         fieldContainer: {
             flexDirection: 'row',
             justifyContent: 'flex-start',
@@ -138,7 +144,7 @@ const Register = () => {
             paddingTop: 10,
             paddingLeft: 10,
             paddingRight: 10,
-            marginBottom: 10
+            marginBottom: 0
         },
         field: {
             borderWidth: 1,
@@ -156,7 +162,7 @@ const Register = () => {
             alignItems: 'center',
             marginTop: 0,
             marginBottom: 20,
-            width: '90%'
+            width: '85%'
         },
         paginationControl: {
             borderWidth: 1,
@@ -172,7 +178,6 @@ const Register = () => {
     });
 
     const onSwipeableOpen = (direction: any) => {
-        console.log('onSwipeableOpen: ', direction);
         if (direction == 'left') {
             switch (page) {
                 case 1:
@@ -205,189 +210,231 @@ const Register = () => {
         }
     }
 
+    const clearControls = () => {
+        setfirstname('')
+        setlastname('')
+        setusername('')
+        setemail('')
+
+        setPassword('')
+        setConfirmPassword('')
+        setPasswordHint('')
+
+        setphone('')
+        setGender('')
+        setdob('')
+        setAddress('')
+        setPage(1)
+    }
+
     const renderSwipeable = () => (
         <Swipeable
-            // onBegan={() => onSwipeableOpen("right")}
-            onSwipeableOpenStartDrag={(direction)=>onSwipeableOpen(direction)}>
+            onSwipeableOpenStartDrag={(direction) => onSwipeableOpen(direction)}>
             {renderSections()}
         </Swipeable>
     )
+    const renderPage1Content = () => (
+        <View style={styles.sectionContainer}>
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter first name'
+                    value={firstname}
+                    onChangeText={(text: string) => setfirstname(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setfirstname('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter last name'
+                    value={lastname}
+                    onChangeText={(text: string) => setlastname(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setlastname('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter user name'
+                    value={username}
+                    onChangeText={(text: string) => setusername(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setusername('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter email'
+                    value={email}
+                    onChangeText={(text: string) => setemail(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setemail('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    );
+
+    const renderPage2Content = () => (
+        <View style={styles.sectionContainer}>
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter password'
+                    value={password}
+                    onChangeText={(text: string) => setPassword(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setPassword('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter confirm password'
+                    value={confirmPassword}
+                    onChangeText={(text: string) => setConfirmPassword(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setConfirmPassword('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter password hint'
+                    value={passwordHint}
+                    onChangeText={(text: string) => setPasswordHint(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setPasswordHint('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    );
+
+    const renderPage3Content = () => (
+        <View style={styles.sectionContainer}>
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter dob'
+                    value={dob}
+                    onChangeText={(text: string) => setdob(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setdob('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter phone'
+                    value={phone}
+                    onChangeText={(text: string) => setphone(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setphone('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter gender'
+                    value={gender}
+                    onChangeText={(text: string) => setGender(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setGender('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter address'
+                    value={address}
+                    onChangeText={(text: string) => setAddress(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setAddress('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    )
     const renderSections = () => {
-        if (page == 1) {
-            return (
-                <>
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter first name'
-                            value={firstname}
-                            onChangeText={(text: string) => setfirstname(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setfirstname('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter last name'
-                            value={lastname}
-                            onChangeText={(text: string) => setlastname(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setlastname('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter user name'
-                            value={username}
-                            onChangeText={(text: string) => setusername(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setusername('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter email'
-                            value={email}
-                            onChangeText={(text: string) => setemail(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setemail('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </>
-            )
-        }
-        if (page == 2) {
-            return (
-                <>
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter password'
-                            value={password}
-                            onChangeText={(text: string) => setPassword(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setPassword('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter confirm password'
-                            value={confirmPassword}
-                            onChangeText={(text: string) => setConfirmPassword(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setConfirmPassword('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter dob'
-                            value={dob}
-                            onChangeText={(text: string) => setdob(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setdob('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </>
-            )
-        }
-        if (page == 3) {
-            return (
-                <>
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter phone'
-                            value={phone}
-                            onChangeText={(text: string) => setphone(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setphone('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter gender'
-                            value={gender}
-                            onChangeText={(text: string) => setGender(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setGender('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.fieldContainer}>
-                        <TextInput
-                            placeholder='Enter address'
-                            value={address}
-                            onChangeText={(text: string) => setAddress(text)}
-                            style={[styles.field]} />
-
-                        <View style={{ position: 'absolute', right: 20, top: 22 }}>
-                            <TouchableOpacity onPress={() => setAddress('')}>
-                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </>
-            )
-        }
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%', gap: 20 }}>
+                {page == 1 ? (
+                    <>
+                        {renderPage1Content()}
+                    </>
+                ) : (
+                    <>
+                        {page == 2 ? (
+                            <>
+                                {renderPage2Content()}
+                            </>
+                        ) : (
+                            <>
+                                {renderPage3Content()}
+                            </>
+                        )}
+                    </>
+                )}
+            </View>
+        );
     }
 
     const renderControls = () => {
         return (
             <View style={[styles.paginationContainer,]}>
-                {/* <TouchableOpacity style={styles.paginationControl} onPress={() => {
-                        if (page > 1) {
-                            setPage(page - 1)
-                        }
-                    }}>
-                        <Ionicons name="caret-back" size={24} color={page == 1 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
-                    </TouchableOpacity> */}
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    {/* <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp1}
-                            size={page==1?18:12} />
-                        <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp2}
-                            size={page==2?18:12} />
-                        <AnimatedIcon style={{marginLeft:10}} name="remove-circle" animatedProps={animatedProp3}
-                            size={page==3?18:12} /> */}
 
+                <TouchableOpacity onPress={() => {
+                    if (page > 1) {
+                        setPage(page - 1)
+                    }
+                }}>
+                    <Ionicons name="chevron-back" size={15} color={page == 1 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
+                </TouchableOpacity>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
                     <TouchableOpacity onPress={() => setPage(1)}>
                         <Animated.View style={[animatedStyle1, styles.iconStyle]}>
@@ -402,47 +449,76 @@ const Register = () => {
                         </Animated.View>
                     </TouchableOpacity>
                 </View>
-                {/* <TouchableOpacity style={styles.paginationControl} onPress={() => {
-                        if (page < 3) {
-                            setPage(page + 1)
-                        }
-                    }}>
-                        <Ionicons name="caret-forward" size={24} color={page == 3 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
-                    </TouchableOpacity> */}
+
+                <TouchableOpacity onPress={() => {
+                    if (page < 3) {
+                        setPage(page + 1)
+                    }
+                }}>
+                    <Ionicons name="chevron-forward" size={15} color={page == 3 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
+                </TouchableOpacity>
+
             </View>
         )
     }
 
     return (
+        <>
+            <Stack.Screen options={{
+                headerRight: () => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            // show alert for confirmation
+                            Alert.alert(
+                                'Confirm',
+                                'Are you sure you want to clear the form?',
+                                [
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: 'OK',
+                                        onPress: () => {
+                                            clearControls();
+                                        },
+                                    },
+                                ],
+                            );
+                        }}>
+                        <Text style={{ color: Colors[colorScheme ?? 'light'].primary }}>Clear</Text>
+                    </TouchableOpacity>
+                )
+            }} />
+            <View style={styles.container}>
+                <>
+                    {renderControls()}
+                    <GestureHandlerRootView>
+                        {renderSwipeable()}
+                    </GestureHandlerRootView>
+                </>
 
-        <View style={styles.container}>
-            <>
-                {renderControls()}
-                <GestureHandlerRootView>
-                    {renderSwipeable()}
-                </GestureHandlerRootView>
-            </>
-
-            <View style={{ position: 'absolute', left: 20, bottom: 20, width: '100%' }}>
-                <Text style={{color: Colors[colorScheme??'light'].icon, marginLeft: 10, fontWeight: '400', letterSpacing: 1.0}}>Swipe left or right to continue</Text>
-                <TouchableOpacity onPress={onPressRegisterHandler}
-                    disabled={!isValid}
-                    style={[baseStyles.primaryButton, {
-                        backgroundColor: isValid ? Colors[colorScheme ?? 'light'].text : Colors[colorScheme ?? 'light'].icon,
-                        marginTop: 10,
-                        marginBottom: 0,
-                        width: '100%',
-                        alignSelf: 'center',
-                    }]}>
-                    {loading ? (
-                        <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
-                    ) : (
-                        <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Register</Text>
-                    )}
-                </TouchableOpacity>
-            </View>
-        </View >
-
+                <View style={{ position: 'absolute', left: 20, bottom: 20, width: '100%' }}>
+                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon, marginLeft: 10, fontWeight: '400', letterSpacing: 1.0 }}>Swipe left or right to continue</Text>
+                    <TouchableOpacity onPress={onPressRegisterHandler}
+                        disabled={!isValid}
+                        style={[baseStyles.primaryButton, {
+                            backgroundColor: isValid ? Colors[colorScheme ?? 'light'].text : Colors[colorScheme ?? 'light'].icon,
+                            marginTop: 10,
+                            marginBottom: 0,
+                            width: '100%',
+                            alignSelf: 'center',
+                        }]}>
+                        {loading ? (
+                            <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                        ) : (
+                            <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Register</Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
+            </View >
+        </>
     )
 }
 

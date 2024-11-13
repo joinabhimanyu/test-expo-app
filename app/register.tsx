@@ -24,7 +24,8 @@ const Register = () => {
 
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
-    const [passwordHint, setPasswordHint] = React.useState('');
+    const [securityQuestion, setSecurityQuestion] = React.useState('');
+    const [securityAnswer, setSecurityAnswer] = React.useState('');
 
     const [phone, setphone] = React.useState('');
     const [gender, setGender] = React.useState('');
@@ -54,7 +55,8 @@ const Register = () => {
     useEffect(() => {
         if (firstname && lastname && username && email
             && password && confirmPassword
-            && passwordHint
+            && securityQuestion
+            && securityAnswer
             && phone
             && gender
             && dob
@@ -66,7 +68,7 @@ const Register = () => {
             setIsValid(false);
         }
     }, [
-        firstname, lastname, username, email, password, confirmPassword, passwordHint, phone, gender, dob, address
+        firstname, lastname, username, email, password, confirmPassword, securityQuestion, securityAnswer, phone, gender, dob, address
     ]);
 
     useEffect(() => {
@@ -135,7 +137,7 @@ const Register = () => {
             padding: 20,
             backgroundColor: 'white'
         },
-        sectionContainer: { width: width*0.8, gap: 20, height: height*0.5 },
+        sectionContainer: { width: width*0.8, gap: 20, height: height*0.4 },
         clearControl: { position: 'absolute', right: 0, top: 22 },
         fieldContainer: {
             flexDirection: 'row',
@@ -160,7 +162,7 @@ const Register = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginTop: 0,
+            marginTop: 10,
             marginBottom: 20,
             width: '85%'
         },
@@ -218,7 +220,8 @@ const Register = () => {
 
         setPassword('')
         setConfirmPassword('')
-        setPasswordHint('')
+        setSecurityQuestion('')
+        setSecurityAnswer('')
 
         setphone('')
         setGender('')
@@ -325,13 +328,27 @@ const Register = () => {
 
             <View style={styles.fieldContainer}>
                 <TextInput
-                    placeholder='Enter password hint'
-                    value={passwordHint}
-                    onChangeText={(text: string) => setPasswordHint(text)}
+                    placeholder='Enter security question'
+                    value={securityQuestion}
+                    onChangeText={(text: string) => setSecurityQuestion(text)}
                     style={[styles.field]} />
 
                 <View style={styles.clearControl}>
-                    <TouchableOpacity onPress={() => setPasswordHint('')}>
+                    <TouchableOpacity onPress={() => setSecurityQuestion('')}>
+                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <TextInput
+                    placeholder='Enter security answer'
+                    value={securityAnswer}
+                    onChangeText={(text: string) => setSecurityAnswer(text)}
+                    style={[styles.field]} />
+
+                <View style={styles.clearControl}>
+                    <TouchableOpacity onPress={() => setSecurityAnswer('')}>
                         <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
                     </TouchableOpacity>
                 </View>
@@ -425,15 +442,13 @@ const Register = () => {
     const renderControls = () => {
         return (
             <View style={[styles.paginationContainer,]}>
-
-                <TouchableOpacity onPress={() => {
+                {/* <TouchableOpacity onPress={() => {
                     if (page > 1) {
                         setPage(page - 1)
                     }
                 }}>
                     <Ionicons name="chevron-back" size={15} color={page == 1 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
-                </TouchableOpacity>
-
+                </TouchableOpacity> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
                     <TouchableOpacity onPress={() => setPage(1)}>
@@ -449,15 +464,13 @@ const Register = () => {
                         </Animated.View>
                     </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity onPress={() => {
+                {/* <TouchableOpacity onPress={() => {
                     if (page < 3) {
                         setPage(page + 1)
                     }
                 }}>
                     <Ionicons name="chevron-forward" size={15} color={page == 3 ? Colors[colorScheme ?? 'light'].icon : Colors[colorScheme ?? 'light'].secondary} />
-                </TouchableOpacity>
-
+                </TouchableOpacity> */}
             </View>
         )
     }
@@ -493,10 +506,11 @@ const Register = () => {
             }} />
             <View style={styles.container}>
                 <>
-                    {renderControls()}
-                    <GestureHandlerRootView>
+                    <GestureHandlerRootView style={{height: height*0.4}}>
                         {renderSwipeable()}
                     </GestureHandlerRootView>
+                    {renderControls()}
+                    
                 </>
 
                 <View style={{ position: 'absolute', left: 20, bottom: 20, width: '100%' }}>

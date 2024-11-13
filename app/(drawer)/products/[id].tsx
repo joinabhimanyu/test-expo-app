@@ -78,20 +78,41 @@ export default function ProductDetails() {
                             {data ? (
                                 <>
                                     <ScrollView>
-                                        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+                                        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                                            {/* <Image
+                                                source={require('@/assets/images/wallpaper2.jpeg')}
+                                                style={[ {
+                                                    
+                                                    width: width,
+                                                    height: 540,
+                                                    marginBottom: 10,
+                                                    borderWidth: 1,
+                                                    borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
+                                                    backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
+                                                }]} /> */}
+                                            <LinearGradient colors={['transparent', 'rgba(0,0,0,1)']}
+                                                style={{
+                                                    width: width,
+                                                    height: 540,
+                                                }}
+                                            ></LinearGradient>
+                                        </View>
+                                        <View style={{ position: 'absolute' }}>
+                                            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
 
-                                            <Animated.FlatList
-                                                horizontal
-                                                showsHorizontalScrollIndicator={false}
-                                                pagingEnabled
-                                                data={data.images}
-                                                keyExtractor={(item) => item}
-                                                onScroll={onScrollHandler}
-                                                renderItem={({ item, index }) => {
-                                                    return (
-                                                        <CarouselListItem item={item} index={index} scrollX={scrollX} title={data.title} description={data.description} />
-                                                    )
-                                                }} />
+                                                <Animated.FlatList
+                                                    horizontal
+                                                    showsHorizontalScrollIndicator={false}
+                                                    pagingEnabled
+                                                    data={data.images}
+                                                    keyExtractor={(item) => item}
+                                                    onScroll={onScrollHandler}
+                                                    renderItem={({ item, index }) => {
+                                                        return (
+                                                            <CarouselListItem item={item} index={index} scrollX={scrollX} title={data.title} description={data.description} />
+                                                        )
+                                                    }} />
+                                            </View>
                                         </View>
 
                                         {/* <Text>{data.title}</Text> */}

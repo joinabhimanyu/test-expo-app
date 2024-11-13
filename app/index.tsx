@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, Alert }
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, Alert, Image, SafeAreaView }
     from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import baseStyles from '@/styles/baseStyles'
@@ -21,7 +21,7 @@ import createAnimatedComponent = Animated.createAnimatedComponent;
 
 const Home = () => {
     const colorScheme = useColorScheme();
-    const { width } = Dimensions.get('screen');
+    const { width, height } = Dimensions.get('screen');
     const fontsize = useSharedValue(0);
     const marginTop = useSharedValue(0);
     const [username, setUsername] = useState('');
@@ -97,7 +97,7 @@ const Home = () => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: Colors[colorScheme ?? 'light'].background
+            backgroundColor: 'transparent'
         },
         userNameContainer: {
             marginBottom: 20
@@ -224,203 +224,218 @@ const Home = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Animated.View style={[containerAnimatedStyle, styles.logoContainer]}>
-                <Animated.Text style={[animatedStyle, styles.fontText]}>Instagramicons</Animated.Text>
-                {/* <Text style={styles.fontText}>Instagramicons</Text> */}
-            </Animated.View>
-            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', width: width, height: height }}>
+            <Image
+                source={require('@/assets/images/wallpaper3.jpeg')}
+                style={[{
 
-                {!loginWithOTP ? (
+                    width: width,
+                    height: height,
+                    // marginBottom: 10,
+                    // borderWidth: 1,
+                    // borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
+                    // backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
+                }]} />
+            <View style={{ position: 'absolute', flex: 1, width: width, height: height }}>
+                <View style={styles.container}>
+                    <Animated.View style={[containerAnimatedStyle, styles.logoContainer]}>
+                        <Animated.Text style={[animatedStyle, styles.fontText]}>Instagramicons</Animated.Text>
+                        {/* <Text style={styles.fontText}>Instagramicons</Text> */}
+                    </Animated.View>
+                    <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
 
-                    <>
-                        <View style={styles.userNameContainer}>
-                            <TextInput
-                                placeholder='Enter user name'
-                                value={username}
-                                onChangeText={(text: string) => setUsername(text)}
-                                onFocus={onFocusUserNameHandler}
-                                onBlur={onBlurUserNameHandler}
-                                style={[styles.field]} />
+                        {!loginWithOTP ? (
 
-                            <View style={{ position: 'absolute', right: 10, top: 15 }}>
+                            <>
+                                <View style={styles.userNameContainer}>
+                                    <TextInput
+                                        placeholder='Enter user name'
+                                        value={username}
+                                        onChangeText={(text: string) => setUsername(text)}
+                                        onFocus={onFocusUserNameHandler}
+                                        onBlur={onBlurUserNameHandler}
+                                        style={[styles.field]} />
 
-                                {showCloseIconUsername ? (
-                                    <TouchableOpacity onPress={clearUserNameHandler}>
-                                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                                    </TouchableOpacity>
-                                ) : null}
+                                    <View style={{ position: 'absolute', right: 10, top: 15 }}>
 
-                            </View>
-                        </View>
+                                        {showCloseIconUsername ? (
+                                            <TouchableOpacity onPress={clearUserNameHandler}>
+                                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                            </TouchableOpacity>
+                                        ) : null}
 
-                        <View style={styles.passwordContainer}>
-                            <TextInput
-                                placeholder='Enter password'
-                                value={password}
-                                onChangeText={(text: string) => setPassword(text)}
-                                onFocus={onFocusPasswordHandler}
-                                onBlur={onBlurPasswordHandler}
-                                secureTextEntry={!showSecurePassword}
-                                style={[styles.field]} />
-
-                            <View style={{ position: 'absolute', right: 10, top: 15 }}>
-
-                                {showCloseIconPassword ? (
-                                    <TouchableOpacity onPress={clearPasswordHandler}>
-                                        <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                                    </TouchableOpacity>
-                                ) : (
-                                    <TouchableOpacity onPress={showPasswordHandler}>
-                                        <AnimatedIonicons
-                                            name="eye"
-                                            style={animatedIconStyle}
-                                            size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                                    </TouchableOpacity>
-                                )}
-
-                            </View>
-                        </View>
-
-                        <Link href=".." style={{ alignSelf: 'flex-end', marginBottom: 30 }} onPress={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }}>
-                            <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
-                        </Link>
-                    </>
-
-                ) : (
-                    <>
-                        {!otpRequested ? (
-                            <View style={styles.userNameContainer}>
-                                <TextInput
-                                    placeholder='Enter phone number'
-                                    keyboardType='phone-pad'
-                                    maxLength={10}
-                                    value={phone}
-                                    onChangeText={(text: string) => setPhone(text)}
-                                    onFocus={onFocusPhoneHandler}
-                                    onBlur={onBlurPhoneHandler}
-                                    style={[styles.field]} />
-
-                                <View style={{ position: 'absolute', right: 10, top: 15 }}>
-
-                                    {showCloseIconPhone ? (
-                                        <TouchableOpacity onPress={clearPhoneHandler}>
-                                            <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
-                                        </TouchableOpacity>
-                                    ) : null}
-
+                                    </View>
                                 </View>
-                            </View>
+
+                                <View style={styles.passwordContainer}>
+                                    <TextInput
+                                        placeholder='Enter password'
+                                        value={password}
+                                        onChangeText={(text: string) => setPassword(text)}
+                                        onFocus={onFocusPasswordHandler}
+                                        onBlur={onBlurPasswordHandler}
+                                        secureTextEntry={!showSecurePassword}
+                                        style={[styles.field]} />
+
+                                    <View style={{ position: 'absolute', right: 10, top: 15 }}>
+
+                                        {showCloseIconPassword ? (
+                                            <TouchableOpacity onPress={clearPasswordHandler}>
+                                                <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity onPress={showPasswordHandler}>
+                                                <AnimatedIonicons
+                                                    name="eye"
+                                                    style={animatedIconStyle}
+                                                    size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                            </TouchableOpacity>
+                                        )}
+
+                                    </View>
+                                </View>
+
+                                <Link href=".." style={{ alignSelf: 'flex-end', marginBottom: 30 }} onPress={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}>
+                                    <Text style={{ color: Colors[colorScheme ?? 'light'].background, fontWeight: 'bold', marginTop: 10 }}>Forgot Password?</Text>
+                                </Link>
+                            </>
+
                         ) : (
-                            <View style={styles.userNameContainer}>
-                                <TextInput
-                                    placeholder='Enter OTP'
-                                    keyboardType='numeric'
-                                    maxLength={6}
-                                    value={otp}
-                                    onChangeText={(text: string) => setOtp(text)}
-                                    style={[styles.field]} />
-                            </View>
+                            <>
+                                {!otpRequested ? (
+                                    <View style={styles.userNameContainer}>
+                                        <TextInput
+                                            placeholder='Enter phone number'
+                                            keyboardType='phone-pad'
+                                            maxLength={10}
+                                            value={phone}
+                                            onChangeText={(text: string) => setPhone(text)}
+                                            onFocus={onFocusPhoneHandler}
+                                            onBlur={onBlurPhoneHandler}
+                                            style={[styles.field]} />
+
+                                        <View style={{ position: 'absolute', right: 10, top: 15 }}>
+
+                                            {showCloseIconPhone ? (
+                                                <TouchableOpacity onPress={clearPhoneHandler}>
+                                                    <Ionicons name='close-circle' size={20} color={Colors[colorScheme ?? 'light'].icon} />
+                                                </TouchableOpacity>
+                                            ) : null}
+
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View style={styles.userNameContainer}>
+                                        <TextInput
+                                            placeholder='Enter OTP'
+                                            keyboardType='numeric'
+                                            maxLength={6}
+                                            value={otp}
+                                            onChangeText={(text: string) => setOtp(text)}
+                                            style={[styles.field]} />
+                                    </View>
+                                )}
+                            </>
                         )}
-                    </>
-                )}
 
-            </View>
+                    </View>
 
-            <View style={{ position: 'absolute', bottom: 20, left: 20 }}>
-                <TouchableOpacity onPress={onSignUpPressHandler}>
-                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon }}>Don't have an account? Sign up.</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.socialMediaContainer}>
-                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].facebookIconBackground }]}>
-                    <Ionicons name='logo-facebook' size={20} color='white' />
-                </TouchableOpacity>
-                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].googleIconBackground }]}>
-                    <Ionicons name='logo-google' size={20} color='white' />
-                </TouchableOpacity>
-                <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].twitterIconBackground }]}>
-                    <Ionicons name='logo-twitter' size={20} color='white' />
-                </TouchableOpacity>
-            </View>
-
-            {!loginWithOTP ? (
-
-                <>
-                    <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {
-                        backgroundColor: Colors[colorScheme ?? 'light'].text,
-                    }]}>
-                        {isLoading ? (
-                            <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
-                        ) : (
-                            <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login</Text>
-                        )}
-                    </TouchableOpacity>
-
-                    <Link href=".." onPress={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setLoginWithOTP(true);
-                        setOTPRequested(false);
-                        setPhone('');
-                        setOtp('');
-                        // router.push({
-                        //     pathname: '/verify-otp',
-                        // });
-                    }}>
-                        <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: '400', marginTop: 10 }}>Login with OTP</Text>
-                    </Link>
-                </>
-
-            ) : (
-                <>
-                    {!otpRequested ? (
-                        <TouchableOpacity onPress={() => {
-                            setOTPRequested(true);
-                            setOtp('');
-
-                        }} style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme ?? 'light'].text,
-                        }]}>
-                            {isLoading ? (
-                                <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
-                            ) : (
-                                <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Request OTP</Text>
-                            )}
+                    <View style={{ position: 'absolute', bottom: 30, left: 20 }}>
+                        <TouchableOpacity onPress={onSignUpPressHandler}>
+                            <Text style={{ color: Colors[colorScheme ?? 'light'].background }}>Don't have an account? Sign up.</Text>
                         </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.socialMediaContainer}>
+                        <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].facebookIconBackground }]}>
+                            <Ionicons name='logo-facebook' size={20} color='white' />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].googleIconBackground }]}>
+                            <Ionicons name='logo-google' size={20} color='white' />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[baseStyles.socialButton, { backgroundColor: Colors[colorScheme ?? 'light'].twitterIconBackground }]}>
+                            <Ionicons name='logo-twitter' size={20} color='white' />
+                        </TouchableOpacity>
+                    </View>
+
+                    {!loginWithOTP ? (
+
+                        <>
+                            <TouchableOpacity onPress={onLoginPressHandler} style={[baseStyles.primaryButton, {
+                                backgroundColor: Colors[colorScheme ?? 'light'].text,
+                            }]}>
+                                {isLoading ? (
+                                    <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                                ) : (
+                                    <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login</Text>
+                                )}
+                            </TouchableOpacity>
+
+                            <Link href=".." onPress={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setLoginWithOTP(true);
+                                setOTPRequested(false);
+                                setPhone('');
+                                setOtp('');
+                                // router.push({
+                                //     pathname: '/verify-otp',
+                                // });
+                            }}>
+                                <Text style={{ color: Colors[colorScheme ?? 'light'].background, fontWeight: '400', marginTop: 10 }}>Login with OTP</Text>
+                            </Link>
+                        </>
+
                     ) : (
-                        <TouchableOpacity onPress={onLoginWithOTPPressHandler} style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme ?? 'light'].text,
-                        }]}>
-                            {isLoading ? (
-                                <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                        <>
+                            {!otpRequested ? (
+                                <TouchableOpacity onPress={() => {
+                                    setOTPRequested(true);
+                                    setOtp('');
+
+                                }} style={[baseStyles.primaryButton, {
+                                    backgroundColor: Colors[colorScheme ?? 'light'].text,
+                                }]}>
+                                    {isLoading ? (
+                                        <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                                    ) : (
+                                        <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Request OTP</Text>
+                                    )}
+                                </TouchableOpacity>
                             ) : (
-                                <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login with OTP</Text>
+                                <TouchableOpacity onPress={onLoginWithOTPPressHandler} style={[baseStyles.primaryButton, {
+                                    backgroundColor: Colors[colorScheme ?? 'light'].text,
+                                }]}>
+                                    {isLoading ? (
+                                        <ActivityIndicator color={Colors[colorScheme ?? 'light'].background} size="small" />
+                                    ) : (
+                                        <Text style={{ color: Colors[colorScheme ?? 'light'].imageBackgroundColor }}>Login with OTP</Text>
+                                    )}
+                                </TouchableOpacity>
                             )}
-                        </TouchableOpacity>
+
+
+                            <Link href=".." onPress={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setLoginWithOTP(false);
+                                setOTPRequested(false);
+                                setPhone('');
+                                setOtp('');
+                                // router.push({
+                                //     pathname: '/verify-otp',
+                                // });
+                            }}>
+                                <Text style={{ color: Colors[colorScheme ?? 'light'].background, fontWeight: '400', marginTop: 10 }}>Login with credentials</Text>
+                            </Link>
+                        </>
                     )}
 
-
-                    <Link href=".." onPress={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setLoginWithOTP(false);
-                        setOTPRequested(false);
-                        setPhone('');
-                        setOtp('');
-                        // router.push({
-                        //     pathname: '/verify-otp',
-                        // });
-                    }}>
-                        <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: '400', marginTop: 10 }}>Login with credentials</Text>
-                    </Link>
-                </>
-            )}
-
+                </View>
+            </View>
         </View>
     )
 }

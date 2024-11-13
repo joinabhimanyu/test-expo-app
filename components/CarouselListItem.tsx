@@ -56,9 +56,9 @@ const CarouselListItem = ({ item, index, scrollX, title, description }:
                     height: 500,
                     marginTop: 20,
                     marginBottom: 10,
-                    borderWidth: 1,
-                    borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
-                    backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
+                    borderWidth: 2,
+                    borderColor: Colors[colorScheme ?? 'light'].text,
+                    backgroundColor: Colors[colorScheme ?? 'light'].text,
                 }]} />
             <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']}
                 style={{

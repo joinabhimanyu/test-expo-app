@@ -3,7 +3,7 @@ import { Drawer } from "expo-router/drawer";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
-import { TouchableHighlight } from "react-native";
+import { Dimensions, TouchableHighlight } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { usePathname, useRouter } from "expo-router";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ export default function DrawerLayout() {
     const colorScheme = useColorScheme();
     const router = useRouter();
     const pathname = usePathname();
+    const {width}=Dimensions.get('screen');
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
 
     return (
@@ -21,6 +22,18 @@ export default function DrawerLayout() {
             <Drawer
                 drawerContent={(props) => <CustomDrawerContent {...props} />}
                 screenOptions={{
+                    drawerStyle: {
+                        width: width * 0.7,
+                        backgroundColor: Colors[colorScheme?? 'light'].background,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                            width: 0,
+                            height: 2
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 3.84,
+                        elevation: 5
+                    },
                     headerShown: false,
                     headerTitleAlign: 'left',
                     headerTintColor: "black",

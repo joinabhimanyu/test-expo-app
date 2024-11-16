@@ -22,10 +22,12 @@ import { addItemsToCart } from "@/redux/cart/actions";
 import { Colors } from "@/constants/Colors";
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import createAnimatedComponent = Animated.createAnimatedComponent;
 
 export default function Index() {
 
     type PositionType = 'absolute' | 'relative' | 'static' | undefined;
+    const AnimatedTouchableOpacity = createAnimatedComponent(TouchableOpacity);
     const router = useRouter();
     const colorScheme = useColorScheme();
     const { width, height } = Dimensions.get('screen');
@@ -59,11 +61,16 @@ export default function Index() {
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
     // const currentOffset = useRef(0);
     const [searchTerm, setSearchTerm] = useState('');
-    const marginTop=useSharedValue(70);
+    const marginTop = useSharedValue(70);
+    const showLoadMore = useSharedValue<boolean>(false);
 
     const animatedStyle = useAnimatedStyle(() => ({
         marginTop: marginTop.value
-    }))
+    }));
+
+    const animatedTouchableOpacityStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: showLoadMore.value ? 1 : 0 }]
+    }));
 
     const { loading, error, data, fetchData } = useFetchGeneric<ProductResponse>(
         {
@@ -154,6 +161,20 @@ export default function Index() {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            <AnimatedTouchableOpacity style={[baseStyles.primaryButton, animatedTouchableOpacityStyle,
+                            {
+                                // display: showLoadMore ? 'flex' : 'none',
+                                backgroundColor: Colors[colorScheme ?? 'light'].secondary,
+                                alignSelf: 'center',
+                                marginBottom: 0,
+                                width: '40%'
+
+                            }]} onPress={() => false}>
+                                <View style={{ flex:1, flexDirection: 'row', justifyContent: 'space-evenly', width:'100%' }}>
+                                    <Ionicons name="refresh" size={17} color={Colors[colorScheme ?? 'light'].searchBoxBackground} />
+                                    <Text style={{ color: 'white' }}>LOAD MORE</Text>
+                                </View>
+                            </AnimatedTouchableOpacity>
                         </Animated.View>
                         <Animated.FlatList
                             style={[animatedStyle]}
@@ -177,6 +198,11 @@ export default function Index() {
                                     marginTop.value = withTiming(0, withSpring({ duration: 50 }));
                                 } else {
                                     marginTop.value = withTiming(70, withSpring({ duration: 50 }));
+                                }
+                                if (e.nativeEvent.contentOffset.y > 4000) {
+                                    showLoadMore.value = true;
+                                } else {
+                                    showLoadMore.value = false;
                                 }
                             }}
                             renderItem={({ item }) => (
@@ -215,15 +241,6 @@ export default function Index() {
                             )}
                             keyExtractor={(item, index) => item.description ?? ""}
                         />
-                        <TouchableOpacity style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme ?? 'light'].secondary,
-                            alignSelf: 'center',
-                            marginBottom: 0,
-                            width: '50%'
-
-                        }]} onPress={() => false}>
-                            <Text style={{ color: 'white' }}>LOAD MORE</Text>
-                        </TouchableOpacity>
                     </View>
                 </>
             )

@@ -22,10 +22,9 @@ const CustomDrawerContent = (props: any) => {
                 </View>
                 <View style={styles.footer}>
                     <View style={{
-                        flex: 1,
-                        width: Dimensions.get('screen').width,
+                        width: Dimensions.get('screen').width*0.7,
                         justifyContent: 'center',
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                     }}>
                         <TouchableOpacity
                             onPress={() => {
@@ -37,8 +36,8 @@ const CustomDrawerContent = (props: any) => {
                                 backgroundColor: Colors[colorScheme ?? 'light'].secondary,
                                 paddingTop: 8,
                                 paddingBottom: 8,
-                                width: 100,
-                                alignSelf: 'center',
+                                width: '50%',
+                                height: 50
                             }]}>
                             <Text style={{ color: 'white' }}>Log Out</Text>
                         </TouchableOpacity>
@@ -79,6 +78,6 @@ const styles = StyleSheet.create({
         // paddingRight: 12,
         // textAlign: 'right',
         position: 'absolute',
-        bottom: 5,
+        bottom: 0,
     },
 });

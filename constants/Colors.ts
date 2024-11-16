@@ -9,6 +9,7 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
+    searchBoxBackground: '#fff',
     facebookIconBackground: '#385185',
     googleIconBackground: '#DD4B39',
     twitterIconBackground: '#00A6ED',
@@ -35,6 +36,7 @@ export const Colors = {
     paginationControlBackgroundColor: '#e9f0f1',
   },
   dark: {
+    searchBoxBackground: '#fff',
     facebookIconBackground: '#385185',
     googleIconBackground: '#DD4B39',
     twitterIconBackground: '#00A6ED',

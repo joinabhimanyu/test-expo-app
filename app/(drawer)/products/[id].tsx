@@ -22,6 +22,7 @@ import { addItemsToCart } from "@/redux/cart/actions";
 import Animated, { interpolate, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import CarouselListItem from "@/components/CarouselListItem";
+import PageLoader from "@/components/PageLoader";
 
 export default function ProductDetails() {
 
@@ -66,9 +67,8 @@ export default function ProductDetails() {
     const { width } = Dimensions.get('screen')
     return (
         <>
-            {/*<Drawer.Screen options={{headerShown:false}}/>*/}
             {loading ? (
-                <ActivityIndicator style={baseStyles.loading} size='large' />
+                <PageLoader/>
             ) : (
                 <>
                     {error ? (
@@ -90,7 +90,7 @@ export default function ProductDetails() {
                                                     borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
                                                     backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
                                                 }]} /> */}
-                                            <LinearGradient colors={['transparent', 'rgba(0,0,0,1)']}
+                                            <LinearGradient colors={['transparent', 'rgb(101, 103, 104)']}
                                                 style={{
                                                     width: width,
                                                     height: 540,

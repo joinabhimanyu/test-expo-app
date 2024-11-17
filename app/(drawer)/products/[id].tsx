@@ -19,7 +19,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import Drawer from "expo-router/drawer";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemsToCart } from "@/redux/cart/actions";
-import Animated, { interpolate, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import CarouselListItem from "@/components/CarouselListItem";
 import PageLoader from "@/components/PageLoader";
@@ -33,6 +33,8 @@ export default function ProductDetails() {
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
 
     const scrollX = useSharedValue(0);
+    const scrollY = useSharedValue(0);
+    const HEADER_HEIGHT = 540;
 
     const { loading, error, data, fetchData } = useFetchGeneric<Product>(
         {
@@ -64,11 +66,35 @@ export default function ProductDetails() {
         }
     });
 
+    const onScrollHandlerScrollView = useAnimatedScrollHandler({
+        onScroll: (e) => {
+            console.log('Scroll', e.contentOffset.y)
+            scrollY.value = e.contentOffset.y;
+        }
+    });
+
+    const headerAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            height: interpolate(
+                scrollY.value,
+                [-850, 0, 850],
+                [540, 540, -100],
+                Extrapolation.CLAMP
+            ),
+            marginBottom: interpolate(
+                scrollY.value,
+                [-850, 0, 850],
+                [0, 0, 20],
+                Extrapolation.CLAMP
+            ),
+        };
+    });
+
     const { width } = Dimensions.get('screen')
     return (
         <>
             {loading ? (
-                <PageLoader/>
+                <PageLoader />
             ) : (
                 <>
                     {error ? (
@@ -77,12 +103,24 @@ export default function ProductDetails() {
                         <>
                             {data ? (
                                 <>
-                                    <ScrollView>
-                                        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                                            {/* <Image
+
+                                    <Animated.ScrollView onScroll={onScrollHandlerScrollView}>
+
+
+                                        <Animated.View
+                                            style={[
+                                                {
+                                                    height: 540,
+                                                    overflow: 'hidden',
+                                                },
+                                                { backgroundColor: 'white' },
+                                                headerAnimatedStyle,
+                                            ]}>
+                                            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                                                {/* <Image
                                                 source={require('@/assets/images/wallpaper2.jpeg')}
-                                                style={[ {
-                                                    
+                                                style={[{
+
                                                     width: width,
                                                     height: 540,
                                                     marginBottom: 10,
@@ -90,32 +128,32 @@ export default function ProductDetails() {
                                                     borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
                                                     backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
                                                 }]} /> */}
-                                            <LinearGradient colors={['transparent', 'rgb(101, 103, 104)']}
-                                                style={{
-                                                    width: width,
-                                                    height: 540,
-                                                }}
-                                            ></LinearGradient>
-                                        </View>
-                                        <View style={{ position: 'absolute' }}>
-                                            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-
-                                                <Animated.FlatList
-                                                    horizontal
-                                                    showsHorizontalScrollIndicator={false}
-                                                    pagingEnabled
-                                                    data={data.images}
-                                                    keyExtractor={(item) => item}
-                                                    onScroll={onScrollHandler}
-                                                    renderItem={({ item, index }) => {
-                                                        return (
-                                                            <CarouselListItem item={item} index={index} scrollX={scrollX} title={data.title} description={data.description} />
-                                                        )
-                                                    }} />
+                                                <LinearGradient colors={['transparent', 'rgb(101, 103, 104)']}
+                                                    style={{
+                                                        width: width,
+                                                        height: 540,
+                                                    }}
+                                                ></LinearGradient>
                                             </View>
-                                        </View>
+                                            <View style={{ position: 'absolute' }}>
+                                                <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
 
-                                        {/* <Text>{data.title}</Text> */}
+                                                    <Animated.FlatList
+                                                        horizontal
+                                                        showsHorizontalScrollIndicator={false}
+                                                        pagingEnabled
+                                                        data={data.images}
+                                                        keyExtractor={(item) => item}
+                                                        onScroll={onScrollHandler}
+                                                        renderItem={({ item, index }) => {
+                                                            return (
+                                                                <CarouselListItem item={item} index={index} scrollX={scrollX} title={data.title} description={data.description} />
+                                                            )
+                                                        }} />
+                                                </View>
+                                            </View>
+                                        </Animated.View>
+
                                         <View style={{
                                             flex: 1,
                                             width: width,
@@ -315,7 +353,7 @@ export default function ProductDetails() {
                                         </View>
 
 
-                                    </ScrollView>
+                                    </Animated.ScrollView>
 
                                 </>
                             ) : (

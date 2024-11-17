@@ -199,7 +199,7 @@ export default function Index() {
                                 } else {
                                     marginTop.value = withTiming(70, withSpring({ duration: 50 }));
                                 }
-                                if (e.nativeEvent.contentOffset.y > 4000) {
+                                if (e.nativeEvent.contentOffset.y > 2000) {
                                     showLoadMore.value = true;
                                 } else {
                                     showLoadMore.value = false;

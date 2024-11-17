@@ -23,6 +23,9 @@ import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnim
 import { LinearGradient } from "expo-linear-gradient";
 import CarouselListItem from "@/components/CarouselListItem";
 import PageLoader from "@/components/PageLoader";
+import AnimatedPager from "@/components/AnimatedPager";
+import CarouselListItemContainer from "@/components/CarouselListItemContainer";
+import CarouselAnimatedFlatList from "@/components/CarouselAnimatedFlatList";
 
 export default function ProductDetails() {
 
@@ -32,9 +35,9 @@ export default function ProductDetails() {
     const [addToCartDisabled, setAddToCartDisabled] = useState(false);
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
 
-    const scrollX = useSharedValue(0);
+    
     const scrollY = useSharedValue(0);
-    const HEADER_HEIGHT = 540;
+    const HEADER_HEIGHT = 550;
 
     const { loading, error, data, fetchData } = useFetchGeneric<Product>(
         {
@@ -60,15 +63,8 @@ export default function ProductDetails() {
         dispatch(addItemsToCart(data!!))
     }
 
-    const onScrollHandler = useAnimatedScrollHandler({
-        onScroll: (e) => {
-            scrollX.value = e.contentOffset.x;
-        }
-    });
-
     const onScrollHandlerScrollView = useAnimatedScrollHandler({
         onScroll: (e) => {
-            console.log('Scroll', e.contentOffset.y)
             scrollY.value = e.contentOffset.y;
         }
     });
@@ -78,7 +74,7 @@ export default function ProductDetails() {
             height: interpolate(
                 scrollY.value,
                 [-850, 0, 850],
-                [540, 540, -100],
+                [HEADER_HEIGHT, HEADER_HEIGHT, -100],
                 Extrapolation.CLAMP
             ),
             marginBottom: interpolate(
@@ -105,12 +101,10 @@ export default function ProductDetails() {
                                 <>
 
                                     <Animated.ScrollView onScroll={onScrollHandlerScrollView}>
-
-
                                         <Animated.View
                                             style={[
                                                 {
-                                                    height: 540,
+                                                    height: HEADER_HEIGHT,
                                                     overflow: 'hidden',
                                                 },
                                                 { backgroundColor: 'white' },
@@ -122,34 +116,25 @@ export default function ProductDetails() {
                                                 style={[{
 
                                                     width: width,
-                                                    height: 540,
+                                                    height: HEADER_HEIGHT,
                                                     marginBottom: 10,
                                                     borderWidth: 1,
                                                     borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
                                                     backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
                                                 }]} /> */}
-                                                <LinearGradient colors={['transparent', 'rgb(101, 103, 104)']}
+                                                <LinearGradient colors={['transparent', 'rgb(212, 213, 214)']}
                                                     style={{
                                                         width: width,
-                                                        height: 540,
+                                                        height: HEADER_HEIGHT,
                                                     }}
                                                 ></LinearGradient>
                                             </View>
                                             <View style={{ position: 'absolute' }}>
                                                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
 
-                                                    <Animated.FlatList
-                                                        horizontal
-                                                        showsHorizontalScrollIndicator={false}
-                                                        pagingEnabled
-                                                        data={data.images}
-                                                        keyExtractor={(item) => item}
-                                                        onScroll={onScrollHandler}
-                                                        renderItem={({ item, index }) => {
-                                                            return (
-                                                                <CarouselListItem item={item} index={index} scrollX={scrollX} title={data.title} description={data.description} />
-                                                            )
-                                                        }} />
+                                                    <CarouselAnimatedFlatList items={data.images} renderItemContent={({ item, index }) => (
+                                                        <CarouselListItem item={item} title={data.title} description={data.description} />
+                                                    )} />
                                                 </View>
                                             </View>
                                         </Animated.View>
@@ -342,16 +327,7 @@ export default function ProductDetails() {
                                                     )
                                                 })}
                                             </View>
-
-                                            {/*<FlatList*/}
-                                            {/*    style={{paddingTop: 20, gap: 20, paddingBottom: 20}}*/}
-                                            {/*    data={data.reviews}*/}
-                                            {/*    keyExtractor={(item) => item.reviewerName}*/}
-                                            {/*    renderItem={({item}) =>
-                                                                flex: 1,}/>*/}
-
                                         </View>
-
 
                                     </Animated.ScrollView>
 

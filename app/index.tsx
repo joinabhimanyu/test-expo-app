@@ -22,7 +22,7 @@ import createAnimatedComponent = Animated.createAnimatedComponent;
 const Home = () => {
     const colorScheme = useColorScheme();
     const { width, height } = Dimensions.get('screen');
-    const fontsize = useSharedValue(0);
+    const fontsize = useSharedValue(1);
     const marginTop = useSharedValue(0);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

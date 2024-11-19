@@ -2,7 +2,7 @@ import { Routes } from '@/constants/Routes';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useGlobalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import { TouchableHighlight, Text, StyleSheet, Alert } from 'react-native';
+import { TouchableHighlight, Text, StyleSheet, Alert, View } from 'react-native';
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { useSelector } from 'react-redux';
@@ -64,8 +64,27 @@ export default function ProductsLayout() {
                                     })
                                 }
                             }}>
-                            <Ionicons name="cart" color={items && items.length ? Colors[colorScheme ?? 'light'].primary
-                                : Colors[colorScheme ?? 'light'].secondary} size={24} />
+                            <>
+                                <Ionicons name={items && items.length ? 'basket' : 'cart'} color={items && items.length ? Colors[colorScheme ?? 'light'].primaryButtonColor
+                                    : Colors[colorScheme ?? 'light'].secondary} size={items && items.length?26:24} />
+                                {/* {items && items.length ? (
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 10,
+                                        backgroundColor: 'transparent',
+                                        borderRadius: 30,
+                                        borderColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
+                                        borderWidth: 0,
+                                        width: 20,
+                                        height: 20,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{ fontWeight: 'bold', color: Colors[colorScheme ?? 'light'].secondary }}>{items.length}</Text>
+                                    </View>
+                                ) : null} */}
+                            </>
                         </TouchableHighlight>
                     ),
                 }}
@@ -92,7 +111,7 @@ export default function ProductsLayout() {
                     presentation: 'modal',
                     animation: 'slide_from_bottom'
                 }} />
-                <Stack.Screen name="cart/checkout" options={{ headerTitle: 'Checkout', headerBackVisible: false, headerRight: () => false }} />
+                <Stack.Screen name="cart/checkout" options={{ headerTitle: 'Checkout', headerBackVisible: false, headerBackButtonMenuEnabled: false, headerRight: () => false }} />
             </Stack>
         </>
     );

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Collapsible } from "@/components/Collapsible";
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Platform, ActionSheetIOS, BackHandler } from "react-native";
 import { BillingInformation, ShippingAddress } from "@/models/checkoutInfo";
 import { Checkbox } from "expo-checkbox";
 import { Picker } from "@react-native-picker/picker";
@@ -12,6 +12,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { router, useNavigation } from 'expo-router';
+import { usePreventRemove } from '@react-navigation/native';
 
 export default function Checkout() {
     const [billingInformation, setBillingInformation] = useState(new BillingInformation());
@@ -21,6 +22,19 @@ export default function Checkout() {
     const dispatch = useDispatch();
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
+    const cardOptions = [
+        'Cancel',
+        'Visa',
+        'MasterCard',
+        'American Express',
+        'Discover',
+        'JCB',
+        'Diners Club',
+        'Discover',
+        'Maestro',
+        'UnionPay',
+        'Other'
+    ];
 
     const styles = StyleSheet.create({
         fieldContainer: {
@@ -68,46 +82,42 @@ export default function Checkout() {
         paymentOptionLabel: { fontSize: 14, fontWeight: "bold" }
     });
 
-    useEffect(() => {
-        addEventListener();
-        return () => {
-            removeEventListener();
-        }
-    }, [orderPlaced]);
+    usePreventRemove(!orderPlaced, ({ data }) => {
+        if (Platform.OS === 'web') {
+            const discard = confirm(
+                'You have unsaved changes. Discard them and leave the screen?'
+            );
 
-    const addEventListener = () => {
-        // Add your event listener here
-        navigation.addListener('beforeRemove', (e) => {
-            e.preventDefault();
-            // Do your stuff here
-            if (orderPlaced) {
-
-                navigation.dispatch(e.data.action);
-                removeEventListener();
-
-            } else {
-
-                Alert.alert(
-                    'Changes might be lost',
-                    'Really want to go back?',
-                    [
-                        { text: "Cancel", style: 'cancel', onPress: () => { } },
-                        {
-                            text: "Yes",
-                            style: 'destructive',
-                            onPress: () => navigation.dispatch(e.data.action),
-                        },
-                    ]
-                );
-
+            if (discard) {
+                navigation.dispatch(data.action);
             }
+        } else {
+            Alert.alert(
+                'Discard changes?',
+                'You have unsaved changes. Discard them and leave the screen?',
+                [
+                    { text: "Don't leave", style: 'cancel', onPress: () => { } },
+                    {
+                        text: 'Discard',
+                        style: 'destructive',
+                        onPress: () => navigation.dispatch(data.action),
+                    },
+                ]
+            );
+        }
+    })
 
-        });
-    }
-
-    const removeEventListener = () => {
-        navigation.removeListener('beforeRemove', () => false);
-    }
+    // useEffect(() => {
+    //     const callback = () => {
+    //         // Do your stuff here
+    //         return true;
+    //     };
+    //     const backHandler = BackHandler.addEventListener(
+    //         "hardwareBackPress",
+    //         callback
+    //     );
+    //     return () => backHandler.remove();
+    // }, []);
 
     const onChangeBillingHandler = (value: string, fieldName: string) => {
         setBillingInformation({ ...billingInformation, [fieldName]: value })
@@ -394,25 +404,41 @@ export default function Checkout() {
                                         </View>
                                         <View style={styles.fieldContainer}>
                                             <Text style={styles.fieldLabel}>Card Type:</Text>
-                                            <Picker style={{ width: 200, paddingLeft: 10 }}
-                                                selectedValue={billingInformation?.cardType}
-                                                onValueChange={(itemValue, itemIndex) => {
-                                                    onChangeBillingHandler(itemValue, "cardType")
-                                                }}>
-                                                <Picker.Item label="Visa" value="Visa" />
-                                                <Picker.Item label="MasterCard" value="MasterCard" />
-                                                <Picker.Item label="American Express" value="American Express" />
-                                                <Picker.Item label="Discover" value="Discover" />
-                                                <Picker.Item label="JCB" value="JCB" />
-                                                <Picker.Item label="Diners Club" value="Diners Club" />
-                                                <Picker.Item label="Discover" value="Discover" />
-                                                <Picker.Item label="Maestro" value="Maestro" />
-                                                <Picker.Item label="UnionPay" value="UnionPay" />
-                                                <Picker.Item label="Other" value="Other" />
-                                            </Picker>
-                                            {/*<TextInput style={{paddingLeft: 10}} placeholder="Enter Card Type"*/}
-                                            {/*           value={billingInformation?.cardType}*/}
-                                            {/*           onChangeText={(text) => onChangeBillingHandler(text, "cardType")}/>*/}
+                                            {Platform.OS == "ios" ? (
+                                                <TextInput style={{ paddingLeft: 10 }}
+                                                    readOnly={true}
+                                                    placeholder="Enter Card Type"
+                                                    value={billingInformation?.cardType}
+                                                    //    onChangeText={(text) => onChangeBillingHandler(text, "cardType")}
+                                                    onPress={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        // show IOS action sheet
+                                                        ActionSheetIOS.showActionSheetWithOptions({
+                                                            options: cardOptions,
+                                                            cancelButtonIndex: 0,
+                                                            title: 'Select Card Type',
+                                                        },
+                                                            (buttonIndex: number) => {
+                                                                if (buttonIndex != 0) {
+                                                                    onChangeBillingHandler(cardOptions[buttonIndex], "cardType")
+                                                                } else {
+                                                                    onChangeBillingHandler('', "cardType")
+                                                                }
+                                                            });
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Picker shouldRasterizeIOS={true} style={{ width: 200, paddingLeft: 10 }}
+                                                    selectedValue={billingInformation?.cardType}
+                                                    onValueChange={(itemValue, itemIndex) => {
+                                                        onChangeBillingHandler(itemIndex !== 0 ? itemValue : '', "cardType")
+                                                    }}>
+                                                    {cardOptions.map((item, index) => (
+                                                        <Picker.Item label={item} value={item} />
+                                                    ))}
+                                                </Picker>
+                                            )}
                                         </View>
                                         <View style={styles.fieldContainer}>
                                             <Text style={styles.fieldLabel}>Expiration Date:</Text>

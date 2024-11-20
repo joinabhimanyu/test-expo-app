@@ -32,6 +32,7 @@ export default function PhotosLayout() {
                     </TouchableHighlight>
                 ),
             }} />
+            <Stack.Screen name="[id]" options={{ headerTitle: 'Details' }} />
         </Stack>
     )
 }

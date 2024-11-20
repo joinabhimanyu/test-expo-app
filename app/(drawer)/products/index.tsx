@@ -22,12 +22,11 @@ import { addItemsToCart } from "@/redux/cart/actions";
 import { Colors } from "@/constants/Colors";
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
-import createAnimatedComponent = Animated.createAnimatedComponent;
+import AnimatedSearchAndLoadMore from "@/components/AnimatedSearchAndLoadMore";
 
 export default function Index() {
 
     type PositionType = 'absolute' | 'relative' | 'static' | undefined;
-    const AnimatedTouchableOpacity = createAnimatedComponent(TouchableOpacity);
     const router = useRouter();
     const colorScheme = useColorScheme();
     const { width, height } = Dimensions.get('screen');
@@ -61,15 +60,11 @@ export default function Index() {
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
     // const currentOffset = useRef(0);
     const [searchTerm, setSearchTerm] = useState('');
-    const marginTop = useSharedValue(70);
     const showLoadMore = useSharedValue<boolean>(false);
+    const marginTop = useSharedValue(70);
 
     const animatedStyle = useAnimatedStyle(() => ({
         marginTop: marginTop.value
-    }));
-
-    const animatedTouchableOpacityStyle = useAnimatedStyle(() => ({
-        transform: [{ scale: showLoadMore.value ? 1 : 0 }]
     }));
 
     const { loading, error, data, fetchData } = useFetchGeneric<ProductResponse>(
@@ -120,62 +115,19 @@ export default function Index() {
         )
     }
 
-
     const renderFlatList = useMemo(() => {
         if (data && data.products && data.products.length) {
 
             return (
                 <>
                     <View style={styles.gridContainer}>
-                        <Animated.View style={[{ position: 'absolute', marginBottom: 20, top: 12, width: width, zIndex: 100000, backgroundColor: 'rgba(0, 0, 0, 0)' }]}>
-                            <View style={{
-                                flexDirection: 'row', alignSelf: 'center', width: width * 0.8,
-                                backgroundColor: 'transparent', borderRadius: 30
-                            }}>
-                                <TextInput
-                                    style={{
-                                        backgroundColor: Colors[colorScheme ?? 'light'].searchBoxBackground,
-                                        alignSelf: 'flex-start',
-                                        flex: 1,
-                                        height: 60,
-                                        paddingLeft: 30,
-                                        borderRadius: 30,
-                                        textAlign: 'justify',
-                                        textAlignVertical: 'bottom',
-                                        shadowColor: Colors[colorScheme ?? 'light'].shadowColor,
-                                        shadowOffset: { width: 0, height: 2 },
-                                        shadowOpacity: 0.25,
-                                        shadowRadius: 3.84,
-                                        elevation: 5,
-                                    }}
-                                    placeholder={`Enter search term`}
-                                    value={searchTerm}
-                                    onChangeText={(text) => {
-                                        setSearchTerm(text);
-                                    }} />
-                                <View style={{ position: 'absolute', right: 10, top: 5, justifyContent: 'center', flex: 1, height: 40 }}>
-                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {
-                                        fetchData();
-                                    }}>
-                                        <FontAwesome name="search" size={14} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <AnimatedTouchableOpacity style={[baseStyles.primaryButton, animatedTouchableOpacityStyle,
-                            {
-                                // display: showLoadMore ? 'flex' : 'none',
-                                backgroundColor: Colors[colorScheme ?? 'light'].secondary,
-                                alignSelf: 'center',
-                                marginBottom: 0,
-                                width: '40%'
 
-                            }]} onPress={() => false}>
-                                <View style={{ flex:1, flexDirection: 'row', justifyContent: 'space-evenly', width:'100%' }}>
-                                    <Ionicons name="refresh" size={17} color={Colors[colorScheme ?? 'light'].searchBoxBackground} />
-                                    <Text style={{ color: 'white' }}>LOAD MORE</Text>
-                                </View>
-                            </AnimatedTouchableOpacity>
-                        </Animated.View>
+                        <AnimatedSearchAndLoadMore
+                            searchTerm={searchTerm}
+                            setSearchTerm={setSearchTerm}
+                            fetchData={fetchData}
+                            showLoadMore={showLoadMore} />
+
                         <Animated.FlatList
                             style={[animatedStyle]}
                             data={data.products}

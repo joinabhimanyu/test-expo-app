@@ -102,7 +102,7 @@ export default function ProductsLayout() {
                         </TouchableHighlight>
                     ),
                 }} />
-                <Stack.Screen name="[id]" options={{ headerTitle: 'Product' }} />
+                <Stack.Screen name="[id]" options={{ headerTitle: 'Details' }} />
                 <Stack.Screen name="cart/index" options={{
                     headerTitle: 'Cart',
                     headerRight: () => (

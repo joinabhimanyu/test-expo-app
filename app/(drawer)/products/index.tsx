@@ -38,7 +38,7 @@ export default function Index() {
             padding: 10,
             paddingTop: 0,
             marginBottom: 0,
-            backgroundColor: Colors[colorScheme ?? 'light'].listItemBackground,
+            backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
             borderRadius: 8,
             width: "100%",
             overflow: "hidden"
@@ -47,13 +47,19 @@ export default function Index() {
         listItem: {
             marginBottom: 10,
             padding: 10,
-            backgroundColor: Colors[colorScheme ?? 'light'].listItemBackground,
-            borderRadius: 8,
-            width: "100%",
+            backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
+            borderRadius: 10,
+            shadowColor: Colors[colorScheme ?? 'light'].paginationControlBackgroundColor,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+            elevation: 15,
             justifyContent: "flex-start",
             alignItems: "flex-start",
             flexDirection: "row",
-            flexWrap: "nowrap"
+            flexWrap: "nowrap",
+            width: Dimensions.get('screen').width * 0.93,
+            alignSelf: 'center',
         },
     });
 
@@ -62,7 +68,7 @@ export default function Index() {
     // const currentOffset = useRef(0);
     const [searchTerm, setSearchTerm] = useState('');
     const showLoadMore = useSharedValue<boolean>(false);
-    const marginTop = useSharedValue(70);
+    const marginTop = useSharedValue(80);
 
     const animatedStyle = useAnimatedStyle(() => ({
         marginTop: marginTop.value
@@ -150,7 +156,7 @@ export default function Index() {
                                 if (e.nativeEvent.contentOffset.y > 200) {
                                     marginTop.value = withTiming(0, withSpring({ duration: 50 }));
                                 } else {
-                                    marginTop.value = withTiming(70, withSpring({ duration: 50 }));
+                                    marginTop.value = withTiming(80, withSpring({ duration: 50 }));
                                 }
                                 if (e.nativeEvent.contentOffset.y > 2000) {
                                     showLoadMore.value = true;
@@ -177,7 +183,7 @@ export default function Index() {
                                                         {/* <Image width={80} height={80}
                                                             source={{ uri: item.images[0] }} /> */}
                                                         <Image
-                                                            style={{ width: 80, height: 80, borderRadius: 20, marginTop: 10, backgroundColor: Colors[colorScheme??'light'].transparent }}
+                                                            style={{ width: 80, height: 80, borderRadius: 20, marginTop: 10, backgroundColor: Colors[colorScheme ?? 'light'].transparent }}
                                                             source={{ uri: item.images[0] }}
                                                             placeholder={{ loadingBlurHash }}
                                                             contentFit="cover"

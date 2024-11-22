@@ -48,7 +48,7 @@ const AnimatedSearchAndLoadMore = ({searchTerm, setSearchTerm, fetchData, showLo
                     onChangeText={(text) => {
                         setSearchTerm(text);
                     }} />
-                <View style={{ position: 'absolute', right: 10, top: 5, justifyContent: 'center', flex: 1, height: 40 }}>
+                <View style={{ position: 'absolute', right: 10, top: 5, justifyContent: 'center', height: '100%', alignItems:'center', flex: 1 }}>
                     <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {
                         fetchData();
                     }}>

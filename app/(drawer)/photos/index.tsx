@@ -89,8 +89,9 @@ export default function Photos() {
                             }}>
                                 <GestureHandlerRootView>
                                     <Swipeable overshootRight={false} renderRightActions={() => (
-                                        <View style={{ width: 40, marginRight: 5, justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ flex:0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors[colorScheme??'light'].listItemBackground }}>
                                             {/* {renderRightAction(item)} */}
+                                            <Text>Add to Favorites</Text>
                                         </View>
                                     )}>
                                         <View style={styles.itemContainer}>

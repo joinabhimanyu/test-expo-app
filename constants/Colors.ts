@@ -9,6 +9,7 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
+    transparent: 'transparent',
     searchBoxBackground: '#fff',
     facebookIconBackground: '#385185',
     googleIconBackground: '#DD4B39',
@@ -34,8 +35,10 @@ export const Colors = {
     imageBackgroundColor:'#fff',
     paginationControlBorderColor: '#1b1919',
     paginationControlBackgroundColor: '#e9f0f1',
+    imageBlurBackground: '#0553'
   },
   dark: {
+    transparent: 'transparent',
     searchBoxBackground: '#fff',
     facebookIconBackground: '#385185',
     googleIconBackground: '#DD4B39',
@@ -61,5 +64,6 @@ export const Colors = {
     imageBackgroundColor:'#fff',
     paginationControlBorderColor: '#fff',
     paginationControlBackgroundColor: '#3893bd',
+    imageBlurBackground: '#0553'
   },
 };

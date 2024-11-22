@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, Alert, Image, SafeAreaView }
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, ActivityIndicator, Alert, SafeAreaView }
     from 'react-native'
+import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react'
 import baseStyles from '@/styles/baseStyles'
 import { useColorScheme } from '@/hooks/useColorScheme'
@@ -18,6 +19,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import createAnimatedComponent = Animated.createAnimatedComponent;
+import { blurhash } from '@/constants/Common';
 
 const Home = () => {
     const colorScheme = useColorScheme();
@@ -138,7 +140,13 @@ const Home = () => {
             marginTop: 20,
             marginBottom: 20,
             paddingHorizontal: 20,
-        }
+        },
+        image: {
+            flex: 1,
+            width: width,
+            height: height,
+            backgroundColor: Colors[colorScheme??'light'].imageBlurBackground,
+        },
     });
 
     const [showCloseIconUsername, setShowCloseIconUsername] = useState(false);
@@ -226,16 +234,19 @@ const Home = () => {
     return (
         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', width: width, height: height }}>
             <Image
+                style={styles.image}
+                source={require('@/assets/images/wallpaper3.jpeg')}
+                placeholder={{ blurhash }}
+                contentFit="cover"
+                transition={1000}
+            />
+            {/* <Image
                 source={require('@/assets/images/wallpaper3.jpeg')}
                 style={[{
 
                     width: width,
                     height: height,
-                    // marginBottom: 10,
-                    // borderWidth: 1,
-                    // borderColor: Colors[colorScheme ?? 'light'].imageBorderColor,
-                    // backgroundColor: Colors[colorScheme ?? 'light'].imageBackgroundColor,
-                }]} />
+                }]} /> */}
             <View style={{ position: 'absolute', flex: 1, width: width, height: height }}>
                 <View style={styles.container}>
                     <Animated.View style={[containerAnimatedStyle, styles.logoContainer]}>

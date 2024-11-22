@@ -6,10 +6,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { View, Text, SafeAreaView, StyleSheet, Linking, Dimensions, TouchableOpacity, useColorScheme, FlatList, Image } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Linking, Dimensions, TouchableOpacity, useColorScheme, FlatList } from 'react-native'
+import { Image } from 'expo-image';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import WebView from 'react-native-webview';
+import { blurhash, loadingBlurHash } from '@/constants/Common';
+import moment from 'moment';
 
 export default function Photos() {
     const uri = 'https://stackoverflow.com/questions/35531679/react-native-open-links-in-browser';
@@ -18,14 +21,17 @@ export default function Photos() {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
     const showLoadMore = useSharedValue<boolean>(false);
-    const marginTop = useSharedValue(70);
+    const marginTop = useSharedValue(80);
 
     const animatedStyle = useAnimatedStyle(() => ({
         marginTop: marginTop.value
     }));
 
-    const {EXPO_PUBLIC_NEWS_API_KEY}=process.env;
+    const { EXPO_PUBLIC_NEWS_API_KEY } = process.env;
+    // yesterday date with moment
+    const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
     console.log(`EXPO_PUBLIC_NEWS_API_KEY: ${EXPO_PUBLIC_NEWS_API_KEY}`);
+    
     const { loading, error, data, fetchData } = useFetchGeneric<any>(
         {
             //url: `https://newsapi.org/v2/everything?q=apple&from=2024-11-01&to=2024-11-20&sortBy=popularity&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
@@ -33,8 +39,8 @@ export default function Photos() {
             // url: `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
             // url: `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
             // url: `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
-            url: `https://newsapi.org/v2/everything?q=tesla&from=2024-10-20&sortBy=publishedAt&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
-            
+            url: `https://newsapi.org/v2/everything?q=tesla&from=${yesterdayDate}&sortBy=publishedAt&apiKey=${EXPO_PUBLIC_NEWS_API_KEY}`,
+
             headers: { 'Content-Type': 'application/json' },
             method: 'GET'
         });
@@ -56,7 +62,7 @@ export default function Photos() {
                     <Animated.FlatList
                         style={[animatedStyle, { width: '100%' }]}
                         data={data.articles}
-                        keyExtractor={(item, index) => index}
+                        keyExtractor={(item, index) => index.toString()}
                         onRefresh={() => {
                             setSearchTerm('');
                             fetchData();
@@ -66,7 +72,7 @@ export default function Photos() {
                             if (e.nativeEvent.contentOffset.y > 50) {
                                 marginTop.value = withTiming(0, withSpring({ duration: 50 }));
                             } else {
-                                marginTop.value = withTiming(70, withSpring({ duration: 50 }));
+                                marginTop.value = withTiming(80, withSpring({ duration: 50 }));
                             }
                             if (e.nativeEvent.contentOffset.y > 2000) {
                                 showLoadMore.value = true;
@@ -88,8 +94,15 @@ export default function Photos() {
                                         </View>
                                     )}>
                                         <View style={styles.itemContainer}>
-                                            <Image width={350} height={300} style={{ marginTop: 10, marginBottom: 20, borderRadius: 20 }}
-                                                source={{ uri: item.urlToImage }} />
+                                            {/* <Image width={350} height={300} style={{ marginTop: 10, marginBottom: 20, borderRadius: 20 }}
+                                                source={{ uri: item.urlToImage }} /> */}
+                                            <Image
+                                                style={{ marginTop: 10, marginBottom: 20, borderRadius: 20, width: 350, height: 300 }}
+                                                source={{ uri: item.urlToImage }}
+                                                placeholder={{ blurhash }}
+                                                contentFit="cover"
+                                                transition={1000}
+                                            />
                                             <View style={{ marginLeft: 10, flex: 0.95 }}>
                                                 <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
                                                 <Text>{item.description}</Text>
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: 'white',
     },
     itemContainer: {
         width: Dimensions.get('screen').width * 0.95,
@@ -165,10 +178,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'flex-end',
         backgroundColor: '#faf7f7',
-        // shadowColor: 'gray',
-        // shadowOffset: { width: 15, height: 15 },
-        // shadowOpacity: 0.5,
-        // shadowRadius: 4,
         gap: 10
     }
 })

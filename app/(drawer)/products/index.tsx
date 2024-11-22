@@ -7,12 +7,12 @@ import {
     StyleSheet,
     ActivityIndicator,
     FlatList,
-    Image,
     TouchableHighlight,
     TextInput,
     TouchableOpacity, Button,
     Dimensions
 } from "react-native";
+import { Image } from 'expo-image';
 import baseStyles from "../../../styles/baseStyles";
 import { Stack, useRouter } from "expo-router";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -23,6 +23,7 @@ import { Colors } from "@/constants/Colors";
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import AnimatedSearchAndLoadMore from "@/components/AnimatedSearchAndLoadMore";
+import { blurhash, loadingBlurHash } from "@/constants/Common";
 
 export default function Index() {
 
@@ -173,8 +174,15 @@ export default function Index() {
                                             <View style={styles.listItem}>
                                                 {item.images && item.images.length ? (
                                                     <>
-                                                        <Image width={80} height={80}
-                                                            source={{ uri: item.images[0] }} />
+                                                        {/* <Image width={80} height={80}
+                                                            source={{ uri: item.images[0] }} /> */}
+                                                        <Image
+                                                            style={{ width: 80, height: 80, borderRadius: 20, marginTop: 10, backgroundColor: Colors[colorScheme??'light'].transparent }}
+                                                            source={{ uri: item.images[0] }}
+                                                            placeholder={{ loadingBlurHash }}
+                                                            contentFit="cover"
+                                                            transition={1000}
+                                                        />
                                                         <View style={{ flex: 0.95, paddingLeft: 15, paddingTop: 10 }}>
                                                             <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
                                                             <Text>{item.description}</Text>

@@ -24,7 +24,7 @@ const AnimatedSearchAndLoadMore = ({searchTerm, setSearchTerm, fetchData, showLo
     return (
         <Animated.View style={[{ position: 'absolute', marginBottom: 20, top: 12, width: width, zIndex: 100000, backgroundColor: 'rgba(0, 0, 0, 0)' }]}>
             <View style={{
-                flexDirection: 'row', alignSelf: 'center', width: width * 0.8,
+                flexDirection: 'row', alignSelf: 'center', width: width * 0.9,
                 backgroundColor: 'transparent', borderRadius: 30
             }}>
                 <TextInput
@@ -32,7 +32,7 @@ const AnimatedSearchAndLoadMore = ({searchTerm, setSearchTerm, fetchData, showLo
                         backgroundColor: Colors[colorScheme ?? 'light'].searchBoxBackground,
                         alignSelf: 'flex-start',
                         flex: 1,
-                        height: 50,
+                        height: 60,
                         paddingLeft: 30,
                         borderRadius: 30,
                         textAlign: 'justify',

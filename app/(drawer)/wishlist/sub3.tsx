@@ -1,10 +1,10 @@
-import { Colors } from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { View, Text, useColorScheme } from 'react-native'
 import React from 'react'
-import {View, Text, useColorScheme} from 'react-native'
+import { Link } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
-export default function Settings() {
-    const colorScheme = useColorScheme();
+const Sub3 = () => {
+  const colorScheme = useColorScheme();
     return (
         <>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -16,3 +16,5 @@ export default function Settings() {
         </>
     )
 }
+
+export default Sub3

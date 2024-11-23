@@ -10,6 +10,17 @@ import { useSelector } from "react-redux";
 import { Product, PurchasedProduct } from "@/models/product";
 import CustomDrawerContent from '@/components/CustomDrawerContent';
 
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+// import ProductsStack from '@/app/(drawer)/products/_layout';
+// import PhotosStack from '@/app/(drawer)/photos/_layout';
+// import AccountsStack from '@/app/(drawer)/accounts/_layout';
+// import CategoryStack from '@/app/(drawer)/category/_layout';
+// import OrdersStack from '@/app/(drawer)/orders/_layout';
+// import SettingsStack from '@/app/(drawer)/settings/_layout';
+// import WishlistStack from '@/app/(drawer)/wishlist/_layout';
+
+// const Drawer = createDrawerNavigator();
+
 export default function DrawerLayout() {
     const colorScheme = useColorScheme();
     const router = useRouter();
@@ -18,6 +29,7 @@ export default function DrawerLayout() {
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
     const [wishlistShown, setWishlistShown] = useState(false);
 
+    const ICON_SIZE=18;
     const handleWishlistToggle = () => {
         setWishlistShown(!wishlistShown);
     };
@@ -53,7 +65,7 @@ export default function DrawerLayout() {
                         drawerLabel: "Products",
                         title: "Products",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="home" size={20} color={color} />
+                            <FontAwesome name="home" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
@@ -63,7 +75,7 @@ export default function DrawerLayout() {
                         drawerLabel: "News",
                         title: "News",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="photo" size={20} color={color} />
+                            <FontAwesome name="photo" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
@@ -73,7 +85,7 @@ export default function DrawerLayout() {
                         drawerLabel: "Category",
                         title: "Category",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="group" size={20} color={color} />
+                            <FontAwesome name="group" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
@@ -83,7 +95,7 @@ export default function DrawerLayout() {
                         drawerLabel: "Accounts",
                         title: "Accounts",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="address-book" size={20} color={color} />
+                            <FontAwesome name="address-book" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
@@ -93,7 +105,7 @@ export default function DrawerLayout() {
                         drawerLabel: "Settings",
                         title: "Settings",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="cog" size={20} color={color} />
+                            <FontAwesome name="cog" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
@@ -103,47 +115,28 @@ export default function DrawerLayout() {
                         drawerLabel: "Orders",
                         title: "Orders",
                         drawerIcon: ({ color }) => (
-                            <FontAwesome name="cart-plus" size={20} color={color} />
+                            <FontAwesome name="cart-plus" size={ICON_SIZE} color={color} />
                         ),
                     }}
                 />
-                <Drawer.Screen
-                    name="wishlist" // This is the name of the page and must match the url from root
-                    options={{
-                        drawerLabel: "Wishlist",
-                        title: "Wishlist",
-                        drawerIcon: ({ color }) => (
-                            // <FontAwesome name="bitbucket" size={20} color={color} />
-                            <TouchableOpacity onPress={handleWishlistToggle}>
-                                <Ionicons name={wishlistShown ? 'chevron-down' : 'chevron-forward-outline'} size={20} color={color} />
-                            </TouchableOpacity>
-                        ),
-                    }}
-                />
-                {/* {wishlistShown ? (
-                    <View style={{marginLeft: 30}}>
-                        <Drawer.Screen
-                            name="settings" // This is the name of the page and must match the url from root
-                            options={{
-                                drawerLabel: "Settings",
-                                title: "Settings",
-                                drawerIcon: ({ color }) => (
-                                    <FontAwesome name="cog" size={20} color={color} />
-                                ),
-                            }}
-                        />
-                        <Drawer.Screen
-                            name="orders" // This is the name of the page and must match the url from root
-                            options={{
-                                drawerLabel: "Orders",
-                                title: "Orders",
-                                drawerIcon: ({ color }) => (
-                                    <FontAwesome name="cart-plus" size={20} color={color} />
-                                ),
-                            }}
-                        />
-                    </View>
-                ) : null} */}
+
+                {/* <Drawer.Group>
+                    <Drawer.Screen
+                        name="wishlist/sub1" // This is the name of the page and must match the url from root
+                        options={{
+                            drawerLabel: "Wishlist",
+                            title: "Wishlist",
+                            drawerIcon: ({ color }) => (
+                                // <FontAwesome name="bitbucket" size={ICON_SIZE} color={color} />
+                                <TouchableOpacity onPress={handleWishlistToggle}>
+                                    <Ionicons name={wishlistShown ? 'chevron-down' : 'chevron-forward-outline'} size={ICON_SIZE} color={color} />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                        component={WishlistStack}
+                    />
+                </Drawer.Group> */}
+
             </Drawer>
         </GestureHandlerRootView>
     )

@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import React from 'react'
 import {View, Text, useColorScheme} from 'react-native'
 
-export default function Settings() {
+export default function Sub1() {
     const colorScheme = useColorScheme();
     return (
         <>

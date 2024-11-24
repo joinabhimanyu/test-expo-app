@@ -107,18 +107,6 @@ export default function Checkout() {
         }
     })
 
-    // useEffect(() => {
-    //     const callback = () => {
-    //         // Do your stuff here
-    //         return true;
-    //     };
-    //     const backHandler = BackHandler.addEventListener(
-    //         "hardwareBackPress",
-    //         callback
-    //     );
-    //     return () => backHandler.remove();
-    // }, []);
-
     const onChangeBillingHandler = (value: string, fieldName: string) => {
         setBillingInformation({ ...billingInformation, [fieldName]: value })
     }

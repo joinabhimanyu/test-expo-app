@@ -8,8 +8,8 @@ export default function Sub1() {
     return (
         <>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Accounts</Text>
-                <Link href="../" style={{
+                <Text>Sub1</Text>
+                <Link href="/products" style={{
                     color: Colors[colorScheme ?? 'light'].primary
                 }}><Text>Go Back</Text></Link>
             </View>

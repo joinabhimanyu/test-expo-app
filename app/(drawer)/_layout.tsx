@@ -10,15 +10,6 @@ import { useSelector } from "react-redux";
 import { Product, PurchasedProduct } from "@/models/product";
 import CustomDrawerContent from '@/components/CustomDrawerContent';
 
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-// import ProductsStack from '@/app/(drawer)/products/_layout';
-// import PhotosStack from '@/app/(drawer)/photos/_layout';
-// import AccountsStack from '@/app/(drawer)/accounts/_layout';
-// import CategoryStack from '@/app/(drawer)/category/_layout';
-// import OrdersStack from '@/app/(drawer)/orders/_layout';
-// import SettingsStack from '@/app/(drawer)/settings/_layout';
-// import WishlistStack from '@/app/(drawer)/wishlist/_layout';
-
 // const Drawer = createDrawerNavigator();
 
 export default function DrawerLayout() {
@@ -27,12 +18,7 @@ export default function DrawerLayout() {
     const pathname = usePathname();
     const { width } = Dimensions.get('screen');
     const { items }: { items: PurchasedProduct[] } = useSelector((state: any) => state.cart);
-    const [wishlistShown, setWishlistShown] = useState(false);
-
-    const ICON_SIZE=18;
-    const handleWishlistToggle = () => {
-        setWishlistShown(!wishlistShown);
-    };
+    const ICON_SIZE = 16;
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -119,23 +105,13 @@ export default function DrawerLayout() {
                         ),
                     }}
                 />
-
-                {/* <Drawer.Group>
-                    <Drawer.Screen
-                        name="wishlist/sub1" // This is the name of the page and must match the url from root
-                        options={{
-                            drawerLabel: "Wishlist",
-                            title: "Wishlist",
-                            drawerIcon: ({ color }) => (
-                                // <FontAwesome name="bitbucket" size={ICON_SIZE} color={color} />
-                                <TouchableOpacity onPress={handleWishlistToggle}>
-                                    <Ionicons name={wishlistShown ? 'chevron-down' : 'chevron-forward-outline'} size={ICON_SIZE} color={color} />
-                                </TouchableOpacity>
-                            ),
-                        }}
-                        component={WishlistStack}
-                    />
-                </Drawer.Group> */}
+                <Drawer.Screen
+                    name="wishlist" // This is the name of the page and must match the url from root
+                    options={{
+                        drawerLabel: "Wishlist",
+                        title: "Wishlist",
+                    }}
+                />
 
             </Drawer>
         </GestureHandlerRootView>

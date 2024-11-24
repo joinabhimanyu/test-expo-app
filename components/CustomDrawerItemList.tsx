@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerItem } from '@react-navigation/drawer';
 import { DrawerNavigationHelpers, DrawerDescriptorMap } from '@react-navigation/drawer/lib/typescript/commonjs/src/types';
@@ -11,7 +12,7 @@ import {
 import { Href, useNavigation, useRouter } from 'expo-router';
 import * as React from 'react';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, OpaqueColorValue } from 'react-native';
+import { View, Text, TouchableOpacity, OpaqueColorValue, Touchable, useColorScheme } from 'react-native';
 
 type Props = {
     state: DrawerNavigationState<ParamListBase>;
@@ -29,6 +30,7 @@ interface SubMenuProps {
  */
 export function CustomDrawerItemList({ state, navigation, descriptors }: Props) {
     const { buildHref } = useLinkBuilder();
+    const colorScheme = useColorScheme();
     const router = useRouter();
     const navigationObject = useNavigation();
 
@@ -39,19 +41,19 @@ export function CustomDrawerItemList({ state, navigation, descriptors }: Props) 
     const [wishlistMenuIndex, setWishlistMenuIndex] = useState<Number | null>(null);
 
     const ICON_SIZE = 16;
-    const SUB_ICON_SIZE =16;
+    const SUB_ICON_SIZE = 16;
     const wishListSubmenu: SubMenuProps[] = [{
-        label: 'My Wishlist',
+        label: 'Favorites',
         path: '/wishlist/sub1',
-        icon: (focused: boolean, color: string) => <Ionicons name="basket" size={SUB_ICON_SIZE} color={color||(focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
+        icon: (focused: boolean, color: string) => <Ionicons name="basket" size={SUB_ICON_SIZE} color={color || (focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
     }, {
-        label: 'My Shared Items',
+        label: 'Shared Items',
         path: '/wishlist/sub2',
-        icon: (focused: boolean, color: string) => <Ionicons name="share" size={SUB_ICON_SIZE} color={color||(focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
+        icon: (focused: boolean, color: string) => <Ionicons name="share" size={SUB_ICON_SIZE} color={color || (focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
     }, {
-        label: 'My Starred Items',
+        label: 'Preferences',
         path: '/wishlist/sub3',
-        icon: (focused: boolean, color: string) => <Ionicons name="albums" size={SUB_ICON_SIZE} color={color||(focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
+        icon: (focused: boolean, color: string) => <Ionicons name="albums" size={SUB_ICON_SIZE} color={color || (focused ? drawerActiveTintColor : drawerInactiveTintColor)} />
     },
     ];
     const handleWishlistToggle = () => {
@@ -76,33 +78,27 @@ export function CustomDrawerItemList({ state, navigation, descriptors }: Props) 
 
     React.useEffect(() => {
         // add event listeners to navigation state change
-        if (navigationObject) {
-            // try {
-            //     navigationObject.addListener('state', (event: any) => {
+        navigationObject.addListener('state', (event: any) => {
+            const { state } = event.data;
+            if (state && state.routes && state.routes.constructor.name === 'Array' && state.routes.length > 0) {
+                if (state.routes[0] && state.routes[0].state) {
+                    const index = state.routes[0].state.index;
+                    if (index !== 6) {
+                        setWishlistMenuIndex(null);
+                        setWishlistShown(false);
+                    }
+                }
+            }
+        });
 
-            //         const { state } = event.data;
-            //         if (state && state.routes && state.routes.constructor.name === 'Array' && state.routes.length > 0) {
-            //             const index = state.routes[0].state.index;
-            //             if (index !== 6) {
-            //                 setWishlistMenuIndex(null);
-            //                 setWishlistShown(false);
-            //             }
-            //         }
-            //     });
-            // } catch (error) {
-            //     console.log(error);
-            // }
-    
-            // // add event listeners for navigation drawer item press
-            // navigationObject.addListener('beforeRemove', (event) => {
-            //     if (event.target === 'submenu1' || event.target === 'submenu2' || event.target === 'submenu3') {
-            //         setWishlistMenuIndex(parseInt(event.target));
-            //     } else {
-            //         setWishlistMenuIndex(null);
-            //     }
-            // });
-        }
-        
+        // add event listeners for navigation drawer item press
+        // navigationObject.addListener('beforeRemove', (event) => {
+        //     if (event.target === 'submenu1' || event.target === 'submenu2' || event.target === 'submenu3') {
+        //         setWishlistMenuIndex(parseInt(event.target));
+        //     } else {
+        //         setWishlistMenuIndex(null);
+        //     }
+        // });
         return () => {
             // remove navigation listener
             navigationObject.removeListener('state', () => false);
@@ -110,8 +106,23 @@ export function CustomDrawerItemList({ state, navigation, descriptors }: Props) 
         }
     }, [])
 
+    const onToggleCollapse = () => {
+        setWishlistShown(!wishlistShown);
+    }
+
+    const renderMenuText=()=>{
+        if (wishlistShown) {
+            return "Collapse all";
+        }
+        return "Expand all";
+    }
+
     return (
         <>
+            <TouchableOpacity onPress={onToggleCollapse} style={{alignSelf:'flex-start', marginLeft: 15, flexDirection:'row', marginVertical: 15}}>
+                <Ionicons name='menu' size={16} color={Colors[colorScheme ?? 'light'].text} />
+                <Text style={{marginHorizontal: 12}}>{renderMenuText()}</Text>
+            </TouchableOpacity>
             {state.routes.map((route, i) => {
                 const focused = i === state.index;
 
@@ -170,7 +181,13 @@ export function CustomDrawerItemList({ state, navigation, descriptors }: Props) 
                             <DrawerItem
                                 key={route.key}
                                 route={route}
-                                label="Wishlist"
+                                label={
+                                    drawerLabel !== undefined
+                                        ? drawerLabel
+                                        : title !== undefined
+                                            ? title
+                                            : route.name
+                                }
                                 icon={({ color }) => (
                                     <TouchableOpacity onPress={handleWishlistToggle}>
                                         <Ionicons name={wishlistShown ? 'chevron-down' : 'chevron-forward-outline'} size={ICON_SIZE} color={color} />
@@ -199,7 +216,7 @@ export function CustomDrawerItemList({ state, navigation, descriptors }: Props) 
                                                 inactiveBackgroundColor={drawerInactiveBackgroundColor}
                                                 allowFontScaling={drawerAllowFontScaling}
                                                 labelStyle={drawerLabelStyle}
-                                                style={[drawerItemStyle, {marginVertical: -7}]}
+                                                style={[drawerItemStyle, { marginVertical: -2 }]}
                                                 icon={({ color }) => (
                                                     submenu.icon(focusedWishList, color)
                                                 )}

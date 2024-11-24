@@ -24,7 +24,7 @@ const CustomDrawerContent = (props: any) => {
 
                     <Image
                         style={[styles.img]}
-                        source={require("@/assets/images/avatar.png")}
+                        source={require("@/assets/images/avatar2.png")}
                         placeholder={{ loadingBlurHash }}
                         contentFit="contain"
                         transition={1000}
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     logoContainer: {
         height: 140,
         width: "80%",
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 0,
+        marginBottom: 0,
         alignSelf: "center",
     },
     img: {

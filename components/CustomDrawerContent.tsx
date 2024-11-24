@@ -1,12 +1,15 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, useColorScheme, Dimensions } from 'react-native'
 import { Image } from 'expo-image';
 import React from 'react'
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+import { DrawerContentScrollView } from '@react-navigation/drawer'
 import baseStyles from '@/styles/baseStyles'
 import { Colors } from '@/constants/Colors'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { loadingBlurHash } from '@/constants/Common';
+import { CustomDrawerItemList } from './CustomDrawerItemList';
+import { ScrollView } from 'react-native-gesture-handler';
 
+const { height } = Dimensions.get('screen');
 const CustomDrawerContent = (props: any) => {
     const colorScheme = useColorScheme();
     const router = useRouter();
@@ -27,32 +30,17 @@ const CustomDrawerContent = (props: any) => {
                         transition={1000}
                     />
                 </View>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <View>
-                        <DrawerItemList {...props} />
-                    </View>
+                <SafeAreaView style={{ height: height, backgroundColor: 'transparent' }}>
+                    <ScrollView>
+                        <CustomDrawerItemList {...props} />
+                    </ScrollView>
 
                 </SafeAreaView>
             </DrawerContentScrollView>
             <View style={[styles.footer, { backgroundColor: 'transparent' }]}>
-                <View style={{
-                    justifyContent: 'flex-end',
-                    marginLeft: 20,
-                    alignItems: 'center',
-                }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            router.navigate({
-                                pathname: '/'
-                            });
-                        }}
-                        style={[baseStyles.primaryButton, {
-                            backgroundColor: Colors[colorScheme ?? 'light'].text,
-                            height: 50,
-                        }]}>
-                        <Text style={{ color: Colors[colorScheme ?? 'light'].searchBoxBackground }}>Log Out</Text>
-                    </TouchableOpacity>
-                </View>
+                <Link style={{alignSelf:'center'}} href="/">
+                    <Text style={{ color: Colors[colorScheme ?? 'light'].icon, fontWeight: 'bold', fontSize: 16 }}>Log Out</Text>
+                </Link>
             </View>
         </>
     )
@@ -82,10 +70,13 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
     footer: {
+        flex:1,
+        width: Dimensions.get('screen').width*0.7,
+        alignItems:'center',
         fontSize: 12,
         fontWeight: '600',
         padding: 4,
         position: 'absolute',
-        bottom: 5,
+        bottom: 20,
     },
 });
